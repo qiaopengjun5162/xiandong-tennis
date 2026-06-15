@@ -1,4 +1,4 @@
-use xiandong_tennis_core::scorer::{calculate_result, Answer, Personality};
+use xiandong_tennis_core::scorer::{calculate_result, Personality};
 
 #[test]
 fn test_single_winner_a() {
