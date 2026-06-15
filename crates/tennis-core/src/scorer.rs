@@ -50,6 +50,14 @@ impl Personality {
     }
 }
 
+/// Score answers and map to a personality.
+///
+/// Business rules (as defined by the product team):
+/// 1. If one answer dominates by >= 2 votes, that single trait wins outright.
+/// 2. Otherwise, the top two answers form a "combination" personality:
+///    A+B = SwissKnife, B+C = ChainMace, C+D = Lance, A+D = Katana.
+/// 3. Any uncovered tie (e.g. A+C, B+D) falls back to the last question's
+///    answer as a tie-breaker, defaulting to Potato if even that is missing.
 pub fn calculate_result(answers: &[char]) -> Personality {
     let mut counts: HashMap<Answer, usize> = HashMap::new();
     for &ans in answers {
@@ -69,6 +77,7 @@ pub fn calculate_result(answers: &[char]) -> Personality {
     let first = scores[0];
     let second = scores[1];
 
+    // >= 2 margin: a clear dominant trait, no need for combination logic.
     if first.1 - second.1 >= 2 {
         match first.0 {
             'A' => Personality::Shield,
@@ -77,6 +86,8 @@ pub fn calculate_result(answers: &[char]) -> Personality {
             _ => Personality::Potato,
         }
     } else {
+        // Tie case: sort the top two letters so the match arms are stable
+        // regardless of which letter happened to be first in the sorted scores.
         let mut top_two = vec![first.0, second.0];
         top_two.sort();
         match (top_two[0], top_two[1]) {
@@ -84,6 +95,8 @@ pub fn calculate_result(answers: &[char]) -> Personality {
             ('B', 'C') => Personality::ChainMace,
             ('C', 'D') => Personality::Lance,
             ('A', 'D') => Personality::Katana,
+            // Uncovered ties (A+C, B+D) have no defined combination personality,
+            // so we break the tie by looking at the user's final answer.
             _ => fallback_by_last_question(answers),
         }
     }
