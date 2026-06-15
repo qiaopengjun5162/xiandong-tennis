@@ -1,0 +1,1 @@
+/Users/qiaopengjun/Code/Rust/xiandong-tennis/.worktrees/tennis-personality/target/debug/libxiandong_tennis_core.dylib: /Users/qiaopengjun/Code/Rust/xiandong-tennis/.worktrees/tennis-personality/crates/tennis-core/src/lib.rs
