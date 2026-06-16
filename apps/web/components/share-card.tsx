@@ -12,7 +12,7 @@ export const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
     return (
       <div
         ref={ref}
-        className="w-full max-w-[420px] overflow-hidden p-6 text-center sm:p-8"
+        className="w-full max-w-[420px] p-6 text-center sm:p-8"
         style={{
           backgroundColor: "#fff5e6",
           backgroundImage:
@@ -25,12 +25,7 @@ export const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
         <div className="mb-2 text-6xl">{info.emoji}</div>
         <h2
           className="mb-1 text-3xl font-extrabold sm:text-4xl"
-          style={{
-            background: "linear-gradient(135deg, #b45f2b, #7a3e18)",
-            WebkitBackgroundClip: "text",
-            backgroundClip: "text",
-            color: "transparent",
-          }}
+          style={{ color: "#b45f2b" }}
         >
           {info.name}
         </h2>

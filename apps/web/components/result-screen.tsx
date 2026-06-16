@@ -160,7 +160,7 @@ export function ResultScreen({
 
         <div className="mb-6 w-full max-w-[420px]">
           <pre
-            className="whitespace-pre-wrap rounded-[32px] p-4 text-sm"
+            className="rounded-[32px] p-4 text-sm whitespace-pre-wrap"
             style={{
               background: "#f7ebd0",
               color: "#2c3a1f",

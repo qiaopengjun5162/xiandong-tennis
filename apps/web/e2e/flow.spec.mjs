@@ -115,6 +115,10 @@ async function runTest() {
     await page.waitForSelector("text=兵器鉴定完毕", { timeout: TIMEOUT })
     await page.screenshot({ path: join(downloadDir, "02-result.png"), fullPage: true })
 
+    // Verify the share card renders fully for screenshots / html2canvas
+    const card = page.locator("div").filter({ hasText: "弦动 · 网球兵器谱" }).first()
+    await card.screenshot({ path: join(downloadDir, "03-poster-card.png") })
+
     // Verify share-card download button
     const downloadButton = page.getByRole("button", { name: "下载兵器卡 PNG" })
     await downloadButton.click()

@@ -15,7 +15,6 @@ export async function loadWasm(): Promise<WasmModule> {
   // the browser loads it from the public URL at runtime.
   // basePath prefix ensures the path is correct on GitHub Pages sub-path deployments.
   const wasmPath = (process.env.NEXT_PUBLIC_BASE_PATH ?? "") + "/pkg/xiandong_tennis_core.js"
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const mod = (await import(/* webpackIgnore: true */ /* @vite-ignore */ wasmPath)) as WasmModule
   await mod.default()
   wasmModule = mod
