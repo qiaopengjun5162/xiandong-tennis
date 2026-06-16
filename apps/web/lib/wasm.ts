@@ -13,10 +13,8 @@ export async function loadWasm(): Promise<WasmModule> {
   if (wasmModule) return wasmModule
   // webpackIgnore keeps the bundler from trying to resolve the WASM glue at build time;
   // the browser loads it from the public URL at runtime.
-  // @ts-ignore - wasm-pack output is loaded from public URL at runtime
-  const mod = (await import(
-    /* webpackIgnore: true */ "/pkg/xiandong_tennis_core.js"
-  )) as WasmModule
+  // @ts-expect-error -- TS2307: /pkg/ is a browser public URL resolved at runtime, not a TS module path
+  const mod = (await import(/* webpackIgnore: true */ "/pkg/xiandong_tennis_core.js")) as WasmModule
   await mod.default()
   wasmModule = mod
   return mod

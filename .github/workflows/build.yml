@@ -77,16 +77,16 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build WASM core
-        run: |
-          curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
-          wasm-pack build crates/tennis-core --target web --out-dir ../../apps/web/public/pkg
-
       - name: Type check and lint
         run: |
           cd apps/web
           pnpm typecheck
           pnpm lint
+
+      - name: Build WASM core
+        run: |
+          curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+          wasm-pack build crates/tennis-core --target web --out-dir ../../apps/web/public/pkg
 
       - name: Build frontend
         run: |
