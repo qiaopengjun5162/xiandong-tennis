@@ -4,10 +4,10 @@
 
 ## 当前状态
 
-**阶段**：前端视觉已复刻并修复选项渲染问题，本地 E2E 流程测试通过，已推送到 GitHub 等待 CI/Pages 部署更新。  
+**阶段**：答题交互改为自动下一题，结果页新增链接分享与系统分享，html2canvas 颜色问题已修复，本地 E2E 通过，已推送到 GitHub。  
 **仓库**：https://github.com/qiaopengjun5162/xiandong-tennis（PUBLIC）  
-**线上地址**：https://qiaopengjun5162.github.io/xiandong-tennis/（PR #7 合并后生效，已推送最新 `7669a5fb` 等待部署）  
-**分支**：`main`（`7669a5fb`）  
+**线上地址**：https://qiaopengjun5162.github.io/xiandong-tennis/（已推送最新 `a6d9f34a` 等待 Pages 部署）  
+**分支**：`main`（`a6d9f34a`）  
 **工作区**：原始目录 `/Users/qiaopengjun/Code/Rust/xiandong-tennis/`
 
 ## 已完成
@@ -23,6 +23,9 @@
   - 静态构建成功
   - 视觉已复刻为 `网球项目/tennis_weapon.html` 风格（米色羊皮纸、深绿头部、铜色强调、胶囊选项）
   - 修复 WASM 选项渲染（tuple → `[label, value]`）和 radio 单选问题
+  - 答题选中后自动跳转下一题，保留「上一题」和「重测」
+  - 结果页支持复制分享文案、复制结果链接、一键系统分享（navigator.share）
+  - 支持通过 URL 参数 `?r=KEY` 直接查看结果
   - 新增本地 E2E 流程测试（`apps/web/e2e/flow.spec.mjs`）
 - [x] Axum 后端（`crates/server`）
   - `POST /api/results` 接口
@@ -76,19 +79,18 @@
 - `cargo clippy --all-targets --all-features --tests --benches -- -D warnings`：通过
 - `pnpm build`（前端静态构建）：成功
 - `pnpm tsc --noEmit`：通过
-- `node apps/web/e2e/flow.spec.mjs`：通过（欢迎页 → 16 题 → 结果页 → 生成兵器卡按钮）
+- `node apps/web/e2e/flow.spec.mjs`：通过（欢迎页 → 16 题自动跳转 → 结果页 → 下载兵器卡 / 复制文案 / 复制链接）
 - 后端 API 联调：本地 PostgreSQL 上 `POST /api/results` 返回 `{"id":1,"resultType":"SHIELD","createdAt":"..."}`
 
 ## 已知问题
 
 - Docker Hub 在本地无法访问（Bad Gateway），开发中使用的是本地 Homebrew PostgreSQL。
 - 前端 WASM 加载使用 `/* webpackIgnore: true */` + `// @ts-ignore`，这是为了绕过 Turbopack 对 `public/pkg` 下 JS 模块的打包限制。
-- html2canvas 在 headless Chrome 中会报 `unsupported color function "lab"` 警告（来自 shadcn CSS 变量），不影响当前按钮状态验证，但可能导致海报截图中出现颜色偏差。
 
 ## 待办
 
 - [ ] 验证 GitHub Actions build / deploy 最新提交是否全绿
-- [ ] 在真实浏览器中手动验证线上海报下载和截图效果
+- [ ] 在真实移动浏览器中手动验证一键系统分享和海报下载
 - [ ] 补充前端测试（可选）
 
 ## 常用命令
@@ -127,8 +129,9 @@ NEXT_PUBLIC_API_URL=http://localhost:8080
 ## 上次会话摘要
 
 2026-06-16：
-- 前端视觉复刻为上级目录 `网球项目/tennis_weapon.html` 风格，替换默认 shadcn 暗色主题。
-- 修复 WASM 返回 options 为 tuple 数组导致的选项空白和 radio 全选问题。
-- 新增 `apps/web/e2e/flow.spec.mjs`，使用系统 Chrome + `playwright-core` 自动跑完整答题流程。
-- 提交 `7669a5fb` 并推送到 GitHub。
+- 答题交互改为选中后自动跳转下一题，移除「下一题」按钮，保留「上一题」和「重测」。
+- 结果页新增复制分享文案、复制结果链接、一键系统分享（navigator.share）。
+- 支持通过 URL 参数 `?r=KEY` 直接查看结果，方便把链接发给别人。
+- 修复 html2canvas 因 shadcn oklch/lab CSS 变量导致的报错，下载兵器卡 PNG 现在可用。
+- 提交 `a6d9f34a` 并推送到 GitHub。
 - `pnpm build`、`pnpm tsc --noEmit`、E2E 测试全部通过。
