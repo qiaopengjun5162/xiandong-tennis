@@ -42,7 +42,9 @@ export function ResultScreen({
       const link = document.createElement("a")
       link.download = `弦动-兵器谱-${resultType}.png`
       link.href = canvas.toDataURL("image/png")
+      document.body.appendChild(link)
       link.click()
+      document.body.removeChild(link)
     } finally {
       setGenerating(false)
     }
@@ -51,7 +53,9 @@ export function ResultScreen({
   if (!info) {
     return (
       <div className="flex flex-col items-center justify-center px-6 py-20 text-center">
-        <div className="mb-4 text-4xl" style={{ color: "#cb7b3c" }}>⚔️</div>
+        <div className="mb-4 text-4xl" style={{ color: "#cb7b3c" }}>
+          ⚔️
+        </div>
         <p style={{ color: "#7a541f" }}>锻造兵器卡中...</p>
       </div>
     )
@@ -59,10 +63,7 @@ export function ResultScreen({
 
   return (
     <div className="flex flex-col">
-      <div
-        className="px-6 py-4 text-center"
-        style={{ background: "#ecd9b4" }}
-      >
+      <div className="px-6 py-4 text-center" style={{ background: "#ecd9b4" }}>
         <div
           className="text-sm font-bold sm:text-base"
           style={{ color: "#7a541f" }}
@@ -79,10 +80,7 @@ export function ResultScreen({
           <ShareCard info={info} ref={cardRef} />
         </div>
 
-        <div
-          className="mb-6 text-center text-sm"
-          style={{ color: "#9b6e3a" }}
-        >
+        <div className="mb-6 text-center text-sm" style={{ color: "#9b6e3a" }}>
           🔪 截图发球友：“我的兵器是{info.name}，你呢？”
         </div>
 

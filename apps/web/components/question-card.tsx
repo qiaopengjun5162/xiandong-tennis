@@ -1,9 +1,19 @@
-import type { OptionValue, Question } from "@xiandong/core";
+import type { OptionValue, Question } from "@xiandong/core"
 
 interface QuestionCardProps {
-  question: Question;
-  selectedValue: OptionValue | null;
-  onSelect: (value: OptionValue) => void;
+  question: Question
+  selectedValue: OptionValue | null
+  onSelect: (value: OptionValue) => void
+}
+
+function getOptionLabel(opt: Question["options"][number]): string {
+  if (Array.isArray(opt)) return opt[0]
+  return (opt as { 0: string })[0]
+}
+
+function getOptionValue(opt: Question["options"][number]): OptionValue {
+  if (Array.isArray(opt)) return opt[1]
+  return (opt as { 1: OptionValue })[1]
 }
 
 export function QuestionCard({
@@ -14,7 +24,7 @@ export function QuestionCard({
   return (
     <div className="w-full">
       <div
-        className="mb-8 p-5 text-lg font-bold leading-relaxed sm:text-xl"
+        className="mb-8 p-5 text-lg leading-relaxed font-bold sm:text-xl"
         style={{
           color: "#2c3a1f",
           background: "#fff7ea",
@@ -26,13 +36,15 @@ export function QuestionCard({
       </div>
 
       <div className="mb-8 flex flex-col gap-3">
-        {question.options.map((opt) => {
-          const checked = selectedValue === opt.value;
-          const inputId = `opt_${question.id}_${opt.value}`;
+        {question.options.map((opt, idx) => {
+          const value = getOptionValue(opt)
+          const label = getOptionLabel(opt)
+          const checked = selectedValue === value
+          const inputId = `opt_${question.id}_${value}_${idx}`
           return (
             <div
-              key={opt.value}
-              onClick={() => onSelect(opt.value)}
+              key={inputId}
+              onClick={() => onSelect(value)}
               className="flex cursor-pointer items-center gap-4 rounded-full px-5 py-3 transition hover:translate-x-1"
               style={{
                 background: checked ? "#fff2e0" : "white",
@@ -42,11 +54,11 @@ export function QuestionCard({
             >
               <input
                 type="radio"
-                name="qOption"
+                name={`qOption_${question.id}`}
                 id={inputId}
-                value={opt.value}
+                value={value}
                 checked={checked}
-                onChange={() => onSelect(opt.value)}
+                onChange={() => onSelect(value)}
                 className="h-6 w-6 shrink-0 cursor-pointer appearance-none rounded-full"
                 style={{
                   border: checked ? "2px solid #cb7b3c" : "2px solid #b87c3a",
@@ -60,12 +72,12 @@ export function QuestionCard({
                 style={{ color: "#3a2a1a", fontWeight: 500 }}
                 onClick={(e) => e.stopPropagation()}
               >
-                {opt.label}
+                {label}
               </label>
             </div>
-          );
+          )
         })}
       </div>
     </div>
-  );
+  )
 }

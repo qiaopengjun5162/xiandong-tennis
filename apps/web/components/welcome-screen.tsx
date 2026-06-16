@@ -1,5 +1,5 @@
 interface WelcomeScreenProps {
-  onStart: () => void;
+  onStart: () => void
 }
 
 export function WelcomeScreen({ onStart }: WelcomeScreenProps) {
@@ -70,5 +70,5 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps) {
         ⚡ 约球前请出示兵器谱 | 误伤队友概不负责
       </div>
     </div>
-  );
+  )
 }

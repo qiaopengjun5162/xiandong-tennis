@@ -1,10 +1,10 @@
-'use client';
+"use client"
 
-import { forwardRef } from 'react';
-import type { PersonalityInfo } from '@xiandong/core';
+import { forwardRef } from "react"
+import type { PersonalityInfo } from "@xiandong/core"
 
 interface ShareCardProps {
-  info: PersonalityInfo;
+  info: PersonalityInfo
 }
 
 export const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
@@ -74,7 +74,7 @@ export const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
           弦动 · 网球兵器谱 · {info.key}
         </div>
       </div>
-    );
+    )
   }
-);
-ShareCard.displayName = 'ShareCard';
+)
+ShareCard.displayName = "ShareCard"

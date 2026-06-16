@@ -1,16 +1,13 @@
 interface ProgressBarProps {
-  current: number;
-  total: number;
-  label?: string;
+  current: number
+  total: number
+  label?: string
 }
 
 export function ProgressBar({ current, total, label }: ProgressBarProps) {
-  const percent = (current / total) * 100;
+  const percent = (current / total) * 100
   return (
-    <div
-      className="w-full px-7 pb-2 pt-5"
-      style={{ background: "#ecd9b4" }}
-    >
+    <div className="w-full px-7 pt-5 pb-2" style={{ background: "#ecd9b4" }}>
       <div
         className="h-3 w-full overflow-hidden rounded-full"
         style={{
@@ -34,5 +31,5 @@ export function ProgressBar({ current, total, label }: ProgressBarProps) {
         {label || `第 ${current} / ${total} 题`}
       </div>
     </div>
-  );
+  )
 }

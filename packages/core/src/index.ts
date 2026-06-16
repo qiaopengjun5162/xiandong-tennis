@@ -3,7 +3,7 @@ export type OptionValue = 'A' | 'B' | 'C' | 'D';
 export interface Question {
   id: number;
   text: string;
-  options: Array<{ label: string; value: OptionValue }>;
+  options: Array<[string, OptionValue]>;
 }
 
 export interface PersonalityInfo {
