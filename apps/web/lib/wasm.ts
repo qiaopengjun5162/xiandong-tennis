@@ -11,7 +11,10 @@ let wasmModule: WasmModule | null = null;
 
 export async function loadWasm(): Promise<WasmModule> {
   if (wasmModule) return wasmModule;
-  const mod = (await import('../../public/pkg/xiandong_tennis_core')) as WasmModule;
+  // webpackIgnore keeps the bundler from trying to resolve the WASM glue at build time;
+  // the browser loads it from the public URL at runtime.
+  // @ts-ignore - wasm-pack output is loaded from public URL at runtime
+  const mod = (await import(/* webpackIgnore: true */ '/pkg/xiandong_tennis_core.js')) as WasmModule;
   await mod.default();
   wasmModule = mod;
   return mod;

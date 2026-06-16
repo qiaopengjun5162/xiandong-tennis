@@ -14,7 +14,7 @@ interface ResultScreenProps {
   onRestart: () => void;
 }
 
-export function ResultScreen({ resultType, onRestart }: ResultScreenProps) {
+export function ResultScreen({ answers, resultType, onRestart }: ResultScreenProps) {
   const [info, setInfo] = useState<PersonalityInfo | null>(null);
   const [generating, setGenerating] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
