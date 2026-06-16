@@ -2,6 +2,29 @@
 
 Thank you for considering contributing to `xiandong-tennis`! By participating in this project, you are helping to improve the tennis community experience. Please take a moment to review this guide to help us keep the process smooth and efficient.
 
+## 项目结构
+
+```
+crates/server/       # Axum 后端
+crates/tennis-core/  # Rust WASM 核心（题目、计分、人格）
+packages/core/       # TypeScript 类型定义
+apps/web/            # Next.js 前端
+```
+
+## 开发命令
+
+```bash
+just wasm         # 构建 WASM
+just server       # 启动后端（需要 PostgreSQL）
+just web          # 启动前端 (localhost:3000)
+just test         # 运行 Rust 测试
+just fmt          # 格式化
+just clippy       # Clippy 检查
+just check-all    # 提交前完整检查
+```
+
+前端开发时如果不需要后端，直接 `cd apps/web && pnpm dev` 即可——答题逻辑全部在 WASM 里运行，不依赖后端。
+
 ## How to Contribute
 
 We welcome contributions in various forms! Here are a few ways you can get involved:
@@ -54,7 +77,7 @@ When your changes are ready:
 ### 5. Documentation
 
 - If you improve or add any features, please also update the documentation to reflect the changes.
-- Update `README.md`, `README.zh.md`, `CLAUDE.md`, and `DEVLOG.md` when relevant.
+- Update `README.md`, `CLAUDE.md`, and `PROJECT_STATUS.md` when relevant.
 - Use clear and concise language. Make sure examples are working.
 
 ---
