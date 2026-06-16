@@ -10,6 +10,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@xiandong/core':
+        specifier: workspace:*
+        version: link:../../packages/core
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -74,6 +77,12 @@ importers:
       tailwindcss:
         specifier: ^4
         version: 4.3.1
+      typescript:
+        specifier: ^5
+        version: 5.9.3
+
+  packages/core:
+    devDependencies:
       typescript:
         specifier: ^5
         version: 5.9.3
