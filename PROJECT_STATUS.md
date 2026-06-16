@@ -4,10 +4,10 @@
 
 ## 当前状态
 
-**阶段**：CI 全绿，GitHub Pages 部署 workflow 已添加，等待上线。  
+**阶段**：前端视觉已复刻为 `网球项目/tennis_weapon.html` 风格，本地构建与 Rust 检查全绿，等待浏览器流程验证与推送。  
 **仓库**：https://github.com/qiaopengjun5162/xiandong-tennis（PUBLIC）  
-**线上地址**：https://qiaopengjun5162.github.io/xiandong-tennis/（PR #7 合并后生效）  
-**分支**：`main`（`5d534da4`）  
+**线上地址**：https://qiaopengjun5162.github.io/xiandong-tennis/（PR #7 合并后生效，需重新部署才会更新）  
+**分支**：`main`（`d2cd50e1`）  
 **工作区**：原始目录 `/Users/qiaopengjun/Code/Rust/xiandong-tennis/`
 
 ## 已完成
@@ -21,6 +21,7 @@
   - 欢迎页 / 答题页 / 结果页
   - html2canvas 分享海报
   - 静态构建成功
+  - 视觉已复刻为 `网球项目/tennis_weapon.html` 风格（米色羊皮纸、深绿头部、铜色强调、胶囊选项）
 - [x] Axum 后端（`crates/server`）
   - `POST /api/results` 接口
   - PostgreSQL 持久化
@@ -71,6 +72,7 @@
 - `cargo test --workspace`：17 个测试通过
 - `cargo clippy --all-targets --all-features --tests --benches -- -D warnings`：通过
 - `pnpm build`（前端静态构建）：成功
+- `pnpm tsc --noEmit`：通过
 - 后端 API 联调：本地 PostgreSQL 上 `POST /api/results` 返回 `{"id":1,"resultType":"SHIELD","createdAt":"..."}`
 
 ## 已知问题
@@ -82,8 +84,7 @@
 
 - [ ] 浏览器中完整跑一遍答题流程
 - [ ] 验证分享海报下载
-- [ ] 验证 CI 在 GitHub Actions 中跑通
-- [ ] 部署到服务器或静态托管
+- [ ] 推送 `main` 到 GitHub 并验证 CI / GitHub Pages 部署
 - [ ] 补充前端测试（可选）
 
 ## 常用命令
@@ -114,8 +115,6 @@ NEXT_PUBLIC_API_URL=http://localhost:8080
 ## 上次会话摘要
 
 2026-06-16：
-- 完成 MVP 全部功能，合并 PR #1。
-- 补齐开源项目文件（README 中英文、CONTRIBUTING、CODE_OF_CONDUCT、LICENSE、AGENTS、all-contributors、CI/CD、cliff.toml）。
-- 修复 CI 中 `taplo fmt --check` 失败（PR #2）。
-- 添加 `.pre-commit-config.yaml`（PR #3）。
-- 仓库已设为 PUBLIC。
+- 前端视觉复刻为上级目录 `网球项目/tennis_weapon.html` 风格，替换默认 shadcn 暗色主题。
+- 提交 `d2cd50e1`：8 个前端文件更新，367 行变更。
+- `pnpm build`、`pnpm tsc --noEmit`、`just check-all` 全部通过。
