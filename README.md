@@ -1,40 +1,119 @@
 # 弦动 · 网球兵器谱
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-网球人格测试 H5，基于 Rust WASM 核心 + Next.js 前端 + Axum 后端。
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/qiaopengjun5162/xiandong-tennis)
+![GitHub license](https://img.shields.io/github/license/qiaopengjun5162/xiandong-tennis)
+![Rust](https://img.shields.io/badge/Rust-1.88.0-orange?logo=rust)
+![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)
 
-## 快速开始
+## Chinese Documentation
+
+中文文档请参阅 [README.zh.md](README.zh.md)。
+
+## Overview
+
+`xiandong-tennis` is a weapon-themed tennis personality quiz H5 app. It identifies a player's "court weapon" through 16 fun questions and generates a shareable poster.
+
+The project is intentionally split so that the core logic can be reused across Web and future WeChat Mini Program clients:
+
+- **Rust WASM core** (`crates/tennis-core`): questions, scoring, and personality data.
+- **Next.js H5 frontend** (`apps/web`): quiz flow, result screen, and poster generation.
+- **Axum backend** (`crates/server`): persists quiz results to PostgreSQL.
+
+## Features
+
+- 16 weapon-themed tennis questions.
+- 8 personality results: Shield, Hammer, Dagger, Potato, Swiss Knife, Chain Mace, Lance, Katana.
+- Rust WASM core shared across platforms.
+- Share poster generation via `html2canvas`.
+- Backend result recording with Axum + sqlx + PostgreSQL.
+
+## Quick Start
+
+### Prerequisites
+
+- [Rust](https://rustup.rs/)
+- [Node.js](https://nodejs.org/) + [pnpm](https://pnpm.io/)
+- [wasm-pack](https://rustwasm.github.io/wasm-pack/installer/)
+- PostgreSQL (local or Docker)
+
+### Run Locally
 
 ```bash
-# 1. 启动 PostgreSQL
+# 1. Start PostgreSQL
 docker run -d -e POSTGRES_USER=xiandong -e POSTGRES_PASSWORD=xiandong -e POSTGRES_DB=xiandong -p 5432:5432 postgres:16
 
-# 2. 构建 WASM
-wasm-pack build crates/tennis-core --target web --out-dir ../../apps/web/public/pkg
+# 2. Install frontend dependencies
+pnpm install
 
-# 3. 启动后端
-cargo run -p xiandong-server
+# 3. Build the WASM core
+just wasm
 
-# 4. 启动前端
-cd apps/web && pnpm dev
+# 4. Start the backend
+just server
+
+# 5. In another terminal, start the frontend
+just web
 ```
 
-## 项目结构
+Open http://localhost:3000 and take the quiz.
+
+## Project Structure
 
 ```
 xiandong-tennis/
-├── crates/tennis-core    # Rust WASM 核心（题目、计分、人格数据）
-├── crates/server         # Axum 后端 API
-├── apps/web              # Next.js H5 前端
-└── packages/core         # 共享 TypeScript 类型
+├── crates/tennis-core    # Rust WASM core (questions + scoring + personalities)
+├── crates/server         # Axum backend API
+├── apps/web              # Next.js H5 frontend
+├── packages/core         # Shared TypeScript types
+├── Justfile              # Common development tasks
+├── README.md             # This file
+├── README.zh.md          # Chinese documentation
+├── CONTRIBUTING.md       # Contribution guidelines
+├── CLAUDE.md             # Project architecture and commands
+└── DEVLOG.md             # Development log
 ```
 
-## 技术栈
+## Development Workflow
 
-- 核心：Rust + wasm-bindgen
-- 前端：Next.js 16 + TypeScript + Tailwind CSS + shadcn/ui
-- 后端：Rust + Axum + sqlx + PostgreSQL
-- 构建：pnpm workspace + Cargo workspace
+```bash
+just test        # Run Rust tests
+just fmt         # Format Rust + TOML
+just clippy      # Run Clippy lints
+just check-all   # fmt + clippy + test
+```
 
-## 许可证
+## Contributing
 
-MIT
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to report issues, submit pull requests, or improve the project.
+
+## Contributors
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/qiaopengjun5162"><img src="https://avatars.githubusercontent.com/u/124650229?v=4?s=100" width="100px;" alt="Paxon Qiao 乔鹏军"/><br /><sub><b>Paxon Qiao 乔鹏军</b></sub></a><br /><a href="#content-qiaopengjun5162" title="Content">🖋</a> <a href="#code-qiaopengjun5162" title="Code">💻</a> <a href="#doc-qiaopengjun5162" title="Documentation">📖</a></td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td align="center" size="13px" colspan="7">
+        <img src="https://raw.githubusercontent.com/all-contributors/all-contributors-cli/1b8533af435da9854653492b1327a23a4dbd0a10/assets/logo-small.svg">
+          <a href="https://all-contributors.js.org/docs/en/bot/usage">Add your contributions</a>
+        </img>
+      </td>
+    </tr>
+  </tfoot>
+</table>
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
