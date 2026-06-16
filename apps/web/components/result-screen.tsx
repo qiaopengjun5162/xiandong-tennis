@@ -13,6 +13,27 @@ interface ResultScreenProps {
   onRestart: () => void
 }
 
+function buildShareText(info: PersonalityInfo): string {
+  return [
+    `🎾 我的网球兵器是：${info.emoji} ${info.name}`,
+    `「${info.title}」`,
+    ``,
+    `⚡ ${info.style}`,
+    `💬 ${info.quote}`,
+    ``,
+    `来测测你是什么兵器 👉 https://qiaopengjun5162.github.io/xiandong-tennis/?r=${info.key}`,
+  ].join("\n")
+}
+
+function getResultUrl(resultType: string): string {
+  if (typeof window === "undefined") {
+    return `https://qiaopengjun5162.github.io/xiandong-tennis/?r=${resultType}`
+  }
+  const url = new URL(window.location.href)
+  url.search = `?r=${resultType}`
+  return url.toString()
+}
+
 export function ResultScreen({
   answers,
   resultType,
@@ -20,18 +41,31 @@ export function ResultScreen({
 }: ResultScreenProps) {
   const [info, setInfo] = useState<PersonalityInfo | null>(null)
   const [generating, setGenerating] = useState(false)
+  const [copiedText, setCopiedText] = useState(false)
+  const [copiedLink, setCopiedLink] = useState(false)
   const cardRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     getPersonalityInfo(resultType).then((data) => {
       if (data) {
         setInfo(data)
-        submitResult(answers, resultType)
+        if (answers.length > 0) {
+          submitResult(answers, resultType)
+        }
       }
     })
   }, [resultType, answers])
 
-  const handleShare = async () => {
+  useEffect(() => {
+    if (!copiedText && !copiedLink) return
+    const t = setTimeout(() => {
+      setCopiedText(false)
+      setCopiedLink(false)
+    }, 2000)
+    return () => clearTimeout(t)
+  }, [copiedText, copiedLink])
+
+  const handleShareCard = async () => {
     if (!cardRef.current) return
     setGenerating(true)
     try {
@@ -47,6 +81,50 @@ export function ResultScreen({
       document.body.removeChild(link)
     } finally {
       setGenerating(false)
+    }
+  }
+
+  const copyToClipboard = async (text: string, which: "text" | "link") => {
+    try {
+      await navigator.clipboard.writeText(text)
+    } catch {
+      const textarea = document.createElement("textarea")
+      textarea.value = text
+      textarea.style.position = "fixed"
+      textarea.style.opacity = "0"
+      document.body.appendChild(textarea)
+      textarea.select()
+      document.execCommand("copy")
+      document.body.removeChild(textarea)
+    }
+    if (which === "text") setCopiedText(true)
+    else setCopiedLink(true)
+  }
+
+  const handleCopyText = () => {
+    if (!info) return
+    copyToClipboard(buildShareText(info), "text")
+  }
+
+  const handleCopyLink = () => {
+    copyToClipboard(getResultUrl(resultType), "link")
+  }
+
+  const handleSystemShare = async () => {
+    if (!info || typeof navigator === "undefined") return
+    const shareData = {
+      title: `我的网球兵器：${info.name}`,
+      text: buildShareText(info),
+      url: getResultUrl(resultType),
+    }
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData)
+      } else {
+        await copyToClipboard(buildShareText(info), "text")
+      }
+    } catch {
+      // User cancelled or share failed
     }
   }
 
@@ -80,13 +158,61 @@ export function ResultScreen({
           <ShareCard info={info} ref={cardRef} />
         </div>
 
+        <div className="mb-6 w-full max-w-[420px]">
+          <pre
+            className="whitespace-pre-wrap rounded-[32px] p-4 text-sm"
+            style={{
+              background: "#f7ebd0",
+              color: "#2c3a1f",
+              lineHeight: 1.6,
+              fontFamily: "inherit",
+            }}
+          >
+            {buildShareText(info)}
+          </pre>
+          <button
+            onClick={handleCopyText}
+            className="mt-3 w-full rounded-full py-2 text-sm font-bold transition active:translate-y-0.5"
+            style={{
+              background: copiedText ? "#2d4a3b" : "#cb7b3c",
+              color: "white",
+              boxShadow: "0 3px 0 #8b4c2a",
+            }}
+          >
+            {copiedText ? "✅ 已复制，去发朋友圈/群聊" : "📋 复制分享文案"}
+          </button>
+        </div>
+
+        <div className="mb-6 flex w-full max-w-[420px] flex-col gap-3 sm:flex-row">
+          <button
+            onClick={handleSystemShare}
+            className="flex-1 rounded-full px-5 py-3 text-base font-bold text-white transition active:translate-y-0.5"
+            style={{
+              background: "#2d4a3b",
+              boxShadow: "0 3px 0 #1a2f24",
+            }}
+          >
+            🔗 一键分享
+          </button>
+          <button
+            onClick={handleCopyLink}
+            className="flex-1 rounded-full px-5 py-3 text-base font-bold text-white transition active:translate-y-0.5"
+            style={{
+              background: "#cb7b3c",
+              boxShadow: "0 3px 0 #8b4c2a",
+            }}
+          >
+            {copiedLink ? "✅ 链接已复制" : "📎 复制结果链接"}
+          </button>
+        </div>
+
         <div className="mb-6 text-center text-sm" style={{ color: "#9b6e3a" }}>
-          🔪 截图发球友：“我的兵器是{info.name}，你呢？”
+          🔪 也可以下载兵器卡 PNG 发朋友圈
         </div>
 
         <div className="flex flex-col gap-4 sm:flex-row">
           <button
-            onClick={handleShare}
+            onClick={handleShareCard}
             disabled={generating}
             className="rounded-full px-6 py-3 text-base font-bold text-white transition active:translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
             style={{
@@ -94,7 +220,7 @@ export function ResultScreen({
               boxShadow: "0 3px 0 #1a2f24",
             }}
           >
-            {generating ? "生成中..." : "生成兵器卡"}
+            {generating ? "生成中..." : "⬇️ 下载兵器卡 PNG"}
           </button>
           <button
             onClick={onRestart}

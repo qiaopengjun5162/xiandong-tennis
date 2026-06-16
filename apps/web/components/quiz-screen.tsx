@@ -24,33 +24,26 @@ export function QuizScreen({ onFinish }: QuizScreenProps) {
     })
   }, [])
 
+  useEffect(() => {
+    if (questions.length === 0) return
+    if (answers[currentIndex] === null) return
+
+    const timer = setTimeout(() => {
+      const finalAnswers = answers.filter((a): a is OptionValue => a !== null)
+      if (finalAnswers.length === questions.length) {
+        calculateResult(finalAnswers).then((resultType) => {
+          onFinish(finalAnswers, resultType)
+        })
+      } else {
+        setCurrentIndex((i) => i + 1)
+      }
+    }, 250)
+
+    return () => clearTimeout(timer)
+  }, [answers, currentIndex, questions.length, onFinish])
+
   const handleSelect = (value: OptionValue) => {
-    setAnswers((prev) => {
-      const next = [...prev]
-      next[currentIndex] = value
-      return next
-    })
-  }
-
-  const handleNext = async () => {
-    if (answers[currentIndex] === null) {
-      alert("🔫 请先选择你的武器！")
-      return
-    }
-
-    if (currentIndex < questions.length - 1) {
-      setCurrentIndex((i) => i + 1)
-      return
-    }
-
-    const finalAnswers = answers.filter((a): a is OptionValue => a !== null)
-    if (finalAnswers.length !== questions.length) {
-      alert("还有题目未答，请检查")
-      return
-    }
-
-    const resultType = await calculateResult(finalAnswers)
-    onFinish(finalAnswers, resultType)
+    setAnswers((prev) => prev.map((a, i) => (i === currentIndex ? value : a)))
   }
 
   const handlePrev = () => {
@@ -75,8 +68,6 @@ export function QuizScreen({ onFinish }: QuizScreenProps) {
     )
   }
 
-  const isLast = currentIndex === questions.length - 1
-
   return (
     <div className="flex flex-col">
       <ProgressBar current={currentIndex + 1} total={questions.length} />
@@ -97,29 +88,17 @@ export function QuizScreen({ onFinish }: QuizScreenProps) {
           >
             🏠 重测
           </button>
-          <div className="flex gap-3">
-            <button
-              onClick={handlePrev}
-              disabled={currentIndex === 0}
-              className="rounded-full px-5 py-3 text-sm font-bold text-white transition active:translate-y-0.5 disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none sm:px-6 sm:text-base"
-              style={{
-                background: "#2d4a3b",
-                boxShadow: currentIndex === 0 ? "none" : "0 3px 0 #1a2f24",
-              }}
-            >
-              ◀ 上一题
-            </button>
-            <button
-              onClick={handleNext}
-              className="rounded-full px-5 py-3 text-sm font-bold text-white transition active:translate-y-0.5 sm:px-6 sm:text-base"
-              style={{
-                background: "#2d4a3b",
-                boxShadow: "0 3px 0 #1a2f24",
-              }}
-            >
-              {isLast ? "⚔️ 亮兵器·看结果 ▶" : "下一题 ▶"}
-            </button>
-          </div>
+          <button
+            onClick={handlePrev}
+            disabled={currentIndex === 0}
+            className="rounded-full px-5 py-3 text-sm font-bold text-white transition active:translate-y-0.5 disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none sm:px-6 sm:text-base"
+            style={{
+              background: "#2d4a3b",
+              boxShadow: currentIndex === 0 ? "none" : "0 3px 0 #1a2f24",
+            }}
+          >
+            ◀ 上一题
+          </button>
         </div>
       </div>
     </div>

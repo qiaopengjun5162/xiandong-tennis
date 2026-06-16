@@ -80,7 +80,6 @@ async function runTest() {
     await page.goto(baseUrl, { waitUntil: "networkidle" })
     await page.screenshot({ path: join(downloadDir, "00-welcome.png"), fullPage: true })
 
-    // Verify welcome page text
     const headerText = await page.locator("text=SBTI · 网球兵器谱").innerText()
     if (!headerText) throw new Error("Welcome header not found")
 
@@ -102,33 +101,33 @@ async function runTest() {
       if (options.length === 0) throw new Error(`No options on question ${i + 1}`)
       await options[0].click()
 
-      const checkedCount = await page.locator("input[type=radio]:checked").count()
-      if (checkedCount !== 1) {
-        throw new Error(
-          `Expected 1 checked radio on question ${i + 1}, got ${checkedCount}`
-        )
-      }
-
       await page.screenshot({
         path: join(downloadDir, `01-q${String(i + 1).padStart(2, "0")}.png`),
       })
 
-      const isLast = i === 15
-      const btnText = isLast ? "亮兵器·看结果" : "下一题"
-      await page.getByText(btnText).click()
+      // Auto-advance: wait for next question or result page
+      if (i < 15) {
+        await page.waitForSelector(`text=第 ${i + 2} / 16 题`, { timeout: TIMEOUT })
+      }
     }
 
     // Result page
     await page.waitForSelector("text=兵器鉴定完毕", { timeout: TIMEOUT })
     await page.screenshot({ path: join(downloadDir, "02-result.png"), fullPage: true })
 
-    // Verify poster generation button works
-    const shareButton = page.getByText("生成兵器卡")
-    await shareButton.click()
-    // Wait for generating state
+    // Verify share-card download button
+    const downloadButton = page.getByRole("button", { name: "下载兵器卡 PNG" })
+    await downloadButton.click()
     await page.waitForSelector("text=生成中...", { timeout: TIMEOUT })
-    // Wait for it to return to idle
-    await page.waitForSelector("text=生成兵器卡", { timeout: TIMEOUT })
+    await page.waitForSelector("text=下载兵器卡 PNG", { timeout: TIMEOUT })
+
+    // Verify copy-text button
+    await page.getByRole("button", { name: "复制分享文案" }).click()
+    await page.waitForSelector("text=已复制，去发朋友圈/群聊", { timeout: TIMEOUT })
+
+    // Verify copy-link button
+    await page.getByRole("button", { name: "复制结果链接" }).click()
+    await page.waitForSelector("text=链接已复制", { timeout: TIMEOUT })
 
     if (errors.length > 0) {
       throw new Error(`Console errors during test: ${errors.join("; ")}`)

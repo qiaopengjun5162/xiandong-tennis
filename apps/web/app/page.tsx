@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { WelcomeScreen } from "@/components/welcome-screen"
 import { QuizScreen } from "@/components/quiz-screen"
 import { ResultScreen } from "@/components/result-screen"
@@ -11,8 +11,21 @@ type AppState =
   | { kind: "quiz" }
   | { kind: "result"; answers: OptionValue[]; resultType: string }
 
+function getResultTypeFromUrl(): string | null {
+  if (typeof window === "undefined") return null
+  const params = new URLSearchParams(window.location.search)
+  return params.get("r")
+}
+
 export default function Home() {
   const [state, setState] = useState<AppState>({ kind: "welcome" })
+
+  useEffect(() => {
+    const resultType = getResultTypeFromUrl()
+    if (resultType) {
+      setState({ kind: "result", answers: [], resultType })
+    }
+  }, [])
 
   const startQuiz = () => setState({ kind: "quiz" })
 
