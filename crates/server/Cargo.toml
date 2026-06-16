@@ -1,19 +1,25 @@
 [package]
+edition = "2021"
 name = "xiandong-server"
 version = "0.1.0"
-edition = "2021"
 
 [dependencies]
 axum = "0.7"
-tokio = { version = "1", features = ["full"] }
-sqlx = { version = "0.7", features = ["runtime-tokio", "tls-rustls", "postgres", "migrate", "chrono"] }
+chrono = { version = "0.4", features = ["serde"] }
 serde.workspace = true
 serde_json.workspace = true
-tower-http = { version = "0.5", features = ["cors", "trace"] }
+sqlx = { version = "0.7", features = [
+  "runtime-tokio",
+  "tls-rustls",
+  "postgres",
+  "migrate",
+  "chrono",
+] }
 thiserror = "1"
+tokio = { version = "1", features = ["full"] }
+tower-http = { version = "0.5", features = ["cors", "trace"] }
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
-chrono = { version = "0.4", features = ["serde"] }
 xiandong-tennis-core = { path = "../tennis-core" }
 
 [dev-dependencies]
