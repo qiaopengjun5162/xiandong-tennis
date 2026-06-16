@@ -1,7 +1,7 @@
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button"
 
 interface WelcomeScreenProps {
-  onStart: () => void;
+  onStart: () => void
 }
 
 export function WelcomeScreen({ onStart }: WelcomeScreenProps) {
@@ -19,5 +19,5 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps) {
         拔刀入局
       </Button>
     </div>
-  );
+  )
 }
