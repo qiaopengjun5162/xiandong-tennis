@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react"
 import html2canvas from "html2canvas"
-import { Button } from "@/components/ui/button"
 import { ShareCard } from "./share-card"
 import { getPersonalityInfo } from "@/lib/wasm"
 import { submitResult } from "@/lib/api"
@@ -23,7 +22,6 @@ export function ResultScreen({
   const [generating, setGenerating] = useState(false)
   const cardRef = useRef<HTMLDivElement>(null)
 
-  // Load personality info once the result key is known, then submit to backend.
   useEffect(() => {
     getPersonalityInfo(resultType).then((data) => {
       if (data) {
@@ -38,7 +36,7 @@ export function ResultScreen({
     setGenerating(true)
     try {
       const canvas = await html2canvas(cardRef.current, {
-        backgroundColor: "#111",
+        backgroundColor: "#fff5e6",
         scale: 2,
       })
       const link = document.createElement("a")
@@ -52,32 +50,65 @@ export function ResultScreen({
 
   if (!info) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        <p className="text-[#888]">锻造兵器卡中...</p>
+      <div className="flex flex-col items-center justify-center px-6 py-20 text-center">
+        <div className="mb-4 text-4xl" style={{ color: "#cb7b3c" }}>⚔️</div>
+        <p style={{ color: "#7a541f" }}>锻造兵器卡中...</p>
       </div>
     )
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center px-6 py-8">
-      <div className="mb-6 flex flex-col items-center">
-        <ShareCard info={info} ref={cardRef} />
+    <div className="flex flex-col">
+      <div
+        className="px-6 py-4 text-center"
+        style={{ background: "#ecd9b4" }}
+      >
+        <div
+          className="text-sm font-bold sm:text-base"
+          style={{ color: "#7a541f" }}
+        >
+          🏆 兵器鉴定完毕 🏆
+        </div>
       </div>
-      <div className="flex flex-col gap-4 sm:flex-row">
-        <Button
-          onClick={handleShare}
-          disabled={generating}
-          className="bg-[#c82b2b] text-[#e0e0e0] hover:bg-[#a02020]"
+
+      <div
+        className="flex flex-col items-center px-6 py-8"
+        style={{ background: "#fef5e6" }}
+      >
+        <div className="mb-6 flex flex-col items-center">
+          <ShareCard info={info} ref={cardRef} />
+        </div>
+
+        <div
+          className="mb-6 text-center text-sm"
+          style={{ color: "#9b6e3a" }}
         >
-          {generating ? "生成中..." : "生成兵器卡"}
-        </Button>
-        <Button
-          onClick={onRestart}
-          variant="outline"
-          className="border-[#82a68c] bg-transparent text-[#82a68c]"
-        >
-          重新淬炼
-        </Button>
+          🔪 截图发球友：“我的兵器是{info.name}，你呢？”
+        </div>
+
+        <div className="flex flex-col gap-4 sm:flex-row">
+          <button
+            onClick={handleShare}
+            disabled={generating}
+            className="rounded-full px-6 py-3 text-base font-bold text-white transition active:translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
+            style={{
+              background: "#2d4a3b",
+              boxShadow: "0 3px 0 #1a2f24",
+            }}
+          >
+            {generating ? "生成中..." : "生成兵器卡"}
+          </button>
+          <button
+            onClick={onRestart}
+            className="rounded-full px-6 py-3 text-base font-bold text-white transition active:translate-y-0.5"
+            style={{
+              background: "#8b4c2a",
+              boxShadow: "0 3px 0 #552e15",
+            }}
+          >
+            🏏 重新锻造 / 再打一盘
+          </button>
+        </div>
       </div>
     </div>
   )

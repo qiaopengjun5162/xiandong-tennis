@@ -1,26 +1,70 @@
-import type { OptionValue, Question } from '@xiandong/core';
+import type { OptionValue, Question } from "@xiandong/core";
 
 interface QuestionCardProps {
   question: Question;
+  selectedValue: OptionValue | null;
   onSelect: (value: OptionValue) => void;
 }
 
-export function QuestionCard({ question, onSelect }: QuestionCardProps) {
+export function QuestionCard({
+  question,
+  selectedValue,
+  onSelect,
+}: QuestionCardProps) {
   return (
     <div className="w-full">
-      <h2 className="mb-8 text-xl font-semibold leading-relaxed text-[#e0e0e0]">
+      <div
+        className="mb-8 p-5 text-lg font-bold leading-relaxed sm:text-xl"
+        style={{
+          color: "#2c3a1f",
+          background: "#fff7ea",
+          borderLeft: "7px solid #cb7b3c",
+          borderRadius: "20px",
+        }}
+      >
         {question.text}
-      </h2>
-      <div className="flex flex-col gap-4">
-        {question.options.map((opt) => (
-          <button
-            key={opt.value}
-            onClick={() => onSelect(opt.value)}
-            className="rounded-lg border border-[#333] bg-[#151515] px-4 py-4 text-left text-base text-[#bbb] transition hover:border-[#c82b2b] hover:text-[#e0e0e0] active:bg-[#1a1a1a] sm:px-5"
-          >
-            {opt.label}
-          </button>
-        ))}
+      </div>
+
+      <div className="mb-8 flex flex-col gap-3">
+        {question.options.map((opt) => {
+          const checked = selectedValue === opt.value;
+          const inputId = `opt_${question.id}_${opt.value}`;
+          return (
+            <div
+              key={opt.value}
+              onClick={() => onSelect(opt.value)}
+              className="flex cursor-pointer items-center gap-4 rounded-full px-5 py-3 transition hover:translate-x-1"
+              style={{
+                background: checked ? "#fff2e0" : "white",
+                border: checked ? "2px solid #cb7b3c" : "2px solid #decb9e",
+                boxShadow: "0 2px 5px rgba(0,0,0,0.02)",
+              }}
+            >
+              <input
+                type="radio"
+                name="qOption"
+                id={inputId}
+                value={opt.value}
+                checked={checked}
+                onChange={() => onSelect(opt.value)}
+                className="h-6 w-6 shrink-0 cursor-pointer appearance-none rounded-full"
+                style={{
+                  border: checked ? "2px solid #cb7b3c" : "2px solid #b87c3a",
+                  background: checked ? "#cb7b3c" : "white",
+                  boxShadow: checked ? "inset 0 0 0 4px white" : "none",
+                }}
+              />
+              <label
+                htmlFor={inputId}
+                className="flex-1 cursor-pointer text-base sm:text-lg"
+                style={{ color: "#3a2a1a", fontWeight: 500 }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {opt.label}
+              </label>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

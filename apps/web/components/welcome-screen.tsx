@@ -1,23 +1,74 @@
-import { Button } from "@/components/ui/button"
-
 interface WelcomeScreenProps {
-  onStart: () => void
+  onStart: () => void;
 }
 
 export function WelcomeScreen({ onStart }: WelcomeScreenProps) {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center px-6 text-center">
-      <h1 className="mb-4 text-4xl font-bold tracking-widest text-[#c82b2b]">
-        弦动 · 兵器谱
-      </h1>
-      <p className="mb-2 text-lg text-[#82a68c]">16 题鉴定你的球场兵器</p>
-      <p className="mb-10 text-sm text-[#888]">是锤是刀是加特林？</p>
-      <Button
-        onClick={onStart}
-        className="border border-[#82a68c] bg-transparent px-10 py-6 text-lg text-[#82a68c] hover:bg-[#82a68c] hover:text-[#0a0a0a]"
+    <div className="flex flex-col">
+      <div
+        className="px-6 py-6 text-center sm:px-8"
+        style={{
+          background: "#2d4a3b",
+          borderBottom: "4px solid #cb7b3c",
+        }}
       >
-        拔刀入局
-      </Button>
+        <h1
+          className="flex flex-wrap items-center justify-center gap-3 text-2xl font-extrabold sm:text-3xl"
+          style={{ color: "#fae67a", letterSpacing: "-1px" }}
+        >
+          <span>⚔️</span>
+          <span>SBTI · 网球兵器谱</span>
+          <span
+            className="rounded-full px-3 py-1 text-sm"
+            style={{
+              background: "#cb7b3c",
+              color: "#1f2a1b",
+              fontWeight: "bold",
+            }}
+          >
+            武器人格版
+          </span>
+        </h1>
+        <p
+          className="mt-2 text-sm italic opacity-85 sm:text-base"
+          style={{ color: "#fae67a" }}
+        >
+          16题鉴定你的球场兵种 · 是锤是刀是加特林？
+        </p>
+      </div>
+
+      <div
+        className="flex flex-1 flex-col items-center justify-center px-6 py-16 text-center"
+        style={{ background: "#fef5e6" }}
+      >
+        <div
+          className="mb-8 rounded-full px-6 py-4 text-lg font-bold"
+          style={{ background: "#ecd9b4", color: "#7a541f" }}
+        >
+          🎾 约球前请出示兵器谱
+        </div>
+        <p className="mb-10 max-w-md text-base" style={{ color: "#3a2a1a" }}>
+          16 道题，测出你在球场上是铁壁、战锤、匕首还是随缘地雷。
+          截图发朋友圈，看看队友是什么兵器。
+        </p>
+        <button
+          onClick={onStart}
+          className="rounded-full px-10 py-4 text-lg font-bold text-white transition active:translate-y-0.5"
+          style={{
+            background: "#2d4a3b",
+            boxShadow: "0 4px 0 #1a2f24",
+          }}
+        >
+          拔刀入局 · 开始测试 ▶
+        </button>
+      </div>
+
+      <div
+        className="px-6 py-4 text-center text-xs"
+        style={{ background: "#1f2f24", color: "#b79a60" }}
+      >
+        ⚡ 约球前请出示兵器谱 | 误伤队友概不负责
+      </div>
     </div>
-  )
+  );
 }
