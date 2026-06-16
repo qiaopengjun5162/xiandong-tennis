@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS results (
+  id SERIAL PRIMARY KEY,
+  answers TEXT NOT NULL,
+  result_type TEXT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
