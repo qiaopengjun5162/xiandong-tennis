@@ -16,7 +16,7 @@ export function QuestionCard({ question, onSelect }: QuestionCardProps) {
           <button
             key={opt.value}
             onClick={() => onSelect(opt.value)}
-            className="rounded-lg border border-[#333] bg-[#151515] px-5 py-4 text-left text-base text-[#bbb] transition hover:border-[#c82b2b] hover:text-[#e0e0e0] active:bg-[#1a1a1a]"
+            className="rounded-lg border border-[#333] bg-[#151515] px-4 py-4 text-left text-base text-[#bbb] transition hover:border-[#c82b2b] hover:text-[#e0e0e0] active:bg-[#1a1a1a] sm:px-5"
           >
             {opt.label}
           </button>

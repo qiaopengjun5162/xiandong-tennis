@@ -12,7 +12,7 @@ export const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
     return (
       <div
         ref={ref}
-        className="w-[350px] rounded-2xl border border-[#82a68c] bg-[#111] p-8 text-center"
+        className="w-full max-w-[350px] rounded-2xl border border-[#82a68c] bg-[#111] p-6 text-center sm:p-8"
       >
         <div className="mb-2 text-5xl">{info.emoji}</div>
         <h2 className="mb-1 text-3xl font-bold text-[#c82b2b]">{info.name}</h2>
