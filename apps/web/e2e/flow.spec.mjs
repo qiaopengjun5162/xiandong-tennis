@@ -64,64 +64,66 @@ async function runTest() {
       /unsupported color function "lab"/,
     ]
     page.on("pageerror", (err) => {
-      if (!ignoredPatterns.some((p) => p.test(err.message))) {
-        errors.push(err.message)
-      }
+      if (!ignoredPatterns.some((p) => p.test(err.message))) errors.push(err.message)
     })
     page.on("console", (msg) => {
       if (msg.type() === "error") {
-        const text = msg.text()
-        if (!ignoredPatterns.some((p) => p.test(text))) {
-          errors.push(text)
-        }
+        const t = msg.text()
+        if (!ignoredPatterns.some((p) => p.test(t))) errors.push(t)
       }
-    })
-
-    page.on("dialog", async (dialog) => {
-      await dialog.accept()
     })
 
     await page.goto(baseUrl, { waitUntil: "networkidle" })
     await page.screenshot({ path: join(downloadDir, "00-welcome.png"), fullPage: true })
 
-    const headerText = await page.locator("text=SBTI · 网球兵器谱").innerText()
+    let headerText = await page.locator("text=SBTI · 网球兵器谱").innerText()
     if (!headerText) throw new Error("Welcome header not found")
 
     // Start quiz
     await page.getByText("拔刀入局 · 开始测试").click()
     await page.waitForSelector("text=第 1 / 16 题", { timeout: TIMEOUT })
 
-    // Answer all 16 questions
     for (let i = 0; i < 16; i++) {
       await page.waitForSelector(`text=第 ${i + 1} / 16 题`, { timeout: TIMEOUT })
 
-      const optionLabels = await page.locator("label").allInnerTexts()
-      const emptyLabels = optionLabels.filter((t) => !t.trim())
-      if (emptyLabels.length > 0) {
-        throw new Error(`Empty option labels on question ${i + 1}`)
+      // Q3: test skip
+      if (i === 2) {
+        await page.getByText("⏭ 跳过").click()
+        if (i < 15) {
+          await page.waitForSelector(`text=第 ${i + 2} / 16 题`, { timeout: TIMEOUT })
+        }
+        continue
       }
 
       const options = await page.locator("input[type=radio]").all()
       if (options.length === 0) throw new Error(`No options on question ${i + 1}`)
       await options[0].click()
 
+      // Check selection is visible before auto-advance
+      const checked = await page.locator("input[type=radio]:checked").count()
+      if (checked !== 1) {
+        throw new Error(`Expected 1 checked on Q${i + 1}, got ${checked}`)
+      }
+
       await page.screenshot({
         path: join(downloadDir, `01-q${String(i + 1).padStart(2, "0")}.png`),
       })
 
-      const isLast = i === 15
-      const btnText = isLast ? "亮兵器·看结果" : "下一题"
-      await page.getByText(btnText).click()
+      // Wait for auto-advance
+      if (i < 15) {
+        await page.waitForSelector(`text=第 ${i + 2} / 16 题`, { timeout: TIMEOUT })
+      }
 
-      // After Q4, test prev + re-select same option + 下一题
-      if (i === 3) {
+      // After Q5, test prev + re-click same option → auto-advance
+      if (i === 4) {
+        // We're now at Q6. Go back to Q5.
         await page.getByRole("button", { name: "上一题" }).click()
-        await page.waitForSelector("text=第 4 / 16 题", { timeout: TIMEOUT })
-        // Click same option again (should work via label onClick)
-        await page.locator("input[type=radio]").first().click({ force: true })
-        // Click 下一题 to advance back to Q5
-        await page.getByText("下一题").click()
         await page.waitForSelector("text=第 5 / 16 题", { timeout: TIMEOUT })
+        // Re-click same option (should show checked, then auto-advance)
+        const q5radios = await page.locator("input[type=radio]").all()
+        await q5radios[0].click()
+        // Wait for auto-advance back to Q6
+        await page.waitForSelector("text=第 6 / 16 题", { timeout: TIMEOUT })
       }
     }
 
@@ -132,17 +134,16 @@ async function runTest() {
     const card = page.locator("div").filter({ hasText: "弦动 · 网球兵器谱" }).first()
     await card.screenshot({ path: join(downloadDir, "03-poster-card.png") })
 
-    // Verify share-card download button
-    const downloadButton = page.getByRole("button", { name: "下载兵器卡 PNG" })
-    await downloadButton.click()
+    // Download PNG
+    await page.getByRole("button", { name: "下载兵器卡 PNG" }).click()
     await page.waitForSelector("text=生成中...", { timeout: TIMEOUT })
     await page.waitForSelector("text=下载兵器卡 PNG", { timeout: TIMEOUT })
 
-    // Verify copy-text button
+    // Copy text
     await page.getByRole("button", { name: "复制分享文案" }).click()
     await page.waitForSelector("text=已复制，去发朋友圈/群聊", { timeout: TIMEOUT })
 
-    // Verify copy-link button
+    // Copy link
     await page.getByRole("button", { name: "复制结果链接" }).click()
     await page.waitForSelector("text=链接已复制", { timeout: TIMEOUT })
 

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { QuestionCard } from "./question-card"
 import { ProgressBar } from "./progress-bar"
 import { calculateResult, getQuestions } from "@/lib/wasm"
@@ -16,6 +16,8 @@ export function QuizScreen({ onFinish }: QuizScreenProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [loading, setLoading] = useState(true)
 
+  const advanceTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
   useEffect(() => {
     getQuestions().then((qs) => {
       setQuestions(qs)
@@ -24,22 +26,18 @@ export function QuizScreen({ onFinish }: QuizScreenProps) {
     })
   }, [])
 
-  const handleSelect = (value: OptionValue) => {
-    setAnswers((prev) => prev.map((a, i) => (i === currentIndex ? value : a)))
+  const cancelAdvance = () => {
+    if (advanceTimer.current) {
+      clearTimeout(advanceTimer.current)
+      advanceTimer.current = null
+    }
   }
 
-  const handleNext = async () => {
-    if (answers[currentIndex] === null) {
-      alert("🔫 请先选择你的武器！")
-      return
-    }
-
+  const advance = async () => {
     if (currentIndex === questions.length - 1) {
-      const finalAnswers = answers.filter((a): a is OptionValue => a !== null)
-      if (finalAnswers.length !== questions.length) {
-        alert("还有题目未答，请检查")
-        return
-      }
+      const finalAnswers = answers.filter(
+        (a): a is OptionValue => a !== null
+      )
       const resultType = await calculateResult(finalAnswers)
       onFinish(finalAnswers, resultType)
     } else {
@@ -47,11 +45,25 @@ export function QuizScreen({ onFinish }: QuizScreenProps) {
     }
   }
 
+  const handleSelect = (value: OptionValue) => {
+    cancelAdvance()
+    setAnswers((prev) => prev.map((a, i) => (i === currentIndex ? value : a)))
+    advanceTimer.current = setTimeout(advance, 300)
+  }
+
+  const handleSkip = () => {
+    cancelAdvance()
+    setAnswers((prev) => prev.map((a, i) => (i === currentIndex ? null : a)))
+    advanceTimer.current = setTimeout(advance, 200)
+  }
+
   const handlePrev = () => {
+    cancelAdvance()
     if (currentIndex > 0) setCurrentIndex((i) => i - 1)
   }
 
   const handleReset = () => {
+    cancelAdvance()
     setAnswers(new Array(questions.length).fill(null))
     setCurrentIndex(0)
   }
@@ -67,8 +79,6 @@ export function QuizScreen({ onFinish }: QuizScreenProps) {
     )
   }
 
-  const isLast = currentIndex === questions.length - 1
-
   return (
     <div className="flex flex-col">
       <ProgressBar current={currentIndex + 1} total={questions.length} />
@@ -78,10 +88,10 @@ export function QuizScreen({ onFinish }: QuizScreenProps) {
           selectedValue={answers[currentIndex]}
           onSelect={handleSelect}
         />
-        <div className="mt-2 flex items-center justify-between gap-3">
+        <div className="mt-4 flex items-center justify-between gap-3">
           <button
             onClick={handleReset}
-            className="rounded-full px-5 py-3 text-sm font-bold text-white transition active:translate-y-0.5 sm:px-6 sm:text-base"
+            className="rounded-full px-4 py-2 text-xs font-bold text-white transition active:translate-y-0.5 sm:px-5 sm:py-3 sm:text-sm"
             style={{
               background: "#8b4c2a",
               boxShadow: "0 3px 0 #552e15",
@@ -89,27 +99,27 @@ export function QuizScreen({ onFinish }: QuizScreenProps) {
           >
             🏠 重测
           </button>
-          <div className="flex gap-3">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={handleSkip}
+              className="rounded-full px-4 py-2 text-xs font-bold text-white transition active:translate-y-0.5 sm:px-5 sm:py-3 sm:text-sm"
+              style={{
+                background: "#bc9a6b",
+                boxShadow: "0 3px 0 #8b6a3a",
+              }}
+            >
+              ⏭ 跳过
+            </button>
             <button
               onClick={handlePrev}
               disabled={currentIndex === 0}
-              className="rounded-full px-5 py-3 text-sm font-bold text-white transition active:translate-y-0.5 disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none sm:px-6 sm:text-base"
+              className="rounded-full px-4 py-2 text-xs font-bold text-white transition active:translate-y-0.5 disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none sm:px-5 sm:py-3 sm:text-sm"
               style={{
                 background: "#2d4a3b",
                 boxShadow: currentIndex === 0 ? "none" : "0 3px 0 #1a2f24",
               }}
             >
               ◀ 上一题
-            </button>
-            <button
-              onClick={handleNext}
-              className="rounded-full px-5 py-3 text-sm font-bold text-white transition active:translate-y-0.5 sm:px-6 sm:text-base"
-              style={{
-                background: "#2d4a3b",
-                boxShadow: "0 3px 0 #1a2f24",
-              }}
-            >
-              {isLast ? "⚔️ 亮兵器·看结果 ▶" : "下一题 ▶"}
             </button>
           </div>
         </div>
