@@ -27,10 +27,7 @@ pub async fn create_result(
     // Validate that every answer is one of the allowed options.
     for c in &payload.answers {
         if !matches!(c, 'A' | 'B' | 'C' | 'D') {
-            return Err(AppError::BadRequest(format!(
-                "invalid answer value: {}",
-                c
-            )));
+            return Err(AppError::BadRequest(format!("invalid answer value: {}", c)));
         }
     }
 

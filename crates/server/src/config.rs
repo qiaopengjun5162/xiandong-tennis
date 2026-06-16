@@ -10,8 +10,7 @@ impl Config {
     /// Panics if required variables are missing; this is intentional for local development.
     pub fn from_env() -> Self {
         Self {
-            database_url: std::env::var("DATABASE_URL")
-                .expect("DATABASE_URL must be set"),
+            database_url: std::env::var("DATABASE_URL").expect("DATABASE_URL must be set"),
             port: std::env::var("PORT")
                 .ok()
                 .and_then(|s| s.parse().ok())

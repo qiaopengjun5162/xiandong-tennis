@@ -71,8 +71,8 @@ pub fn calculate_result(answers: &[char]) -> Personality {
     let c = counts.get(&Answer::C).copied().unwrap_or(0);
     let d = counts.get(&Answer::D).copied().unwrap_or(0);
 
-    let mut scores = vec![('A', a), ('B', b), ('C', c), ('D', d)];
-    scores.sort_by(|x, y| y.1.cmp(&x.1));
+    let mut scores = [('A', a), ('B', b), ('C', c), ('D', d)];
+    scores.sort_by_key(|x| std::cmp::Reverse(x.1));
 
     let first = scores[0];
     let second = scores[1];
@@ -88,7 +88,7 @@ pub fn calculate_result(answers: &[char]) -> Personality {
     } else {
         // Tie case: sort the top two letters so the match arms are stable
         // regardless of which letter happened to be first in the sorted scores.
-        let mut top_two = vec![first.0, second.0];
+        let mut top_two = [first.0, second.0];
         top_two.sort();
         match (top_two[0], top_two[1]) {
             ('A', 'B') => Personality::SwissKnife,
