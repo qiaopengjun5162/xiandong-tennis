@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { QuestionCard } from "./question-card"
 import { ProgressBar } from "./progress-bar"
 import { calculateResult, getQuestions } from "@/lib/wasm"
@@ -16,6 +16,8 @@ export function QuizScreen({ onFinish }: QuizScreenProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [loading, setLoading] = useState(true)
 
+  const advanceTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
   useEffect(() => {
     getQuestions().then((qs) => {
       setQuestions(qs)
@@ -24,31 +26,43 @@ export function QuizScreen({ onFinish }: QuizScreenProps) {
     })
   }, [])
 
-  const handleSelect = (value: OptionValue) => {
-    if (answers[currentIndex] === value) return
+  const cancelAdvance = () => {
+    if (advanceTimer.current) {
+      clearTimeout(advanceTimer.current)
+      advanceTimer.current = null
+    }
+  }
 
+  const handleSelect = (value: OptionValue) => {
+    cancelAdvance()
     const nextAnswers = answers.map((a, i) => (i === currentIndex ? value : a))
     setAnswers(nextAnswers)
 
     if (currentIndex === questions.length - 1) {
-      const finalAnswers = nextAnswers.filter(
-        (a): a is OptionValue => a !== null
-      )
-      calculateResult(finalAnswers).then((resultType) => {
-        onFinish(finalAnswers, resultType)
-      })
+      advanceTimer.current = setTimeout(() => {
+        const finalAnswers = nextAnswers.filter(
+          (a): a is OptionValue => a !== null
+        )
+        calculateResult(finalAnswers).then((resultType) => {
+          onFinish(finalAnswers, resultType)
+        })
+      }, 400)
     } else {
-      setCurrentIndex((i) => i + 1)
+      advanceTimer.current = setTimeout(() => {
+        setCurrentIndex((i) => i + 1)
+      }, 400)
     }
   }
 
   const handlePrev = () => {
+    cancelAdvance()
     if (currentIndex > 0) {
       setCurrentIndex((i) => i - 1)
     }
   }
 
   const handleReset = () => {
+    cancelAdvance()
     setAnswers(new Array(questions.length).fill(null))
     setCurrentIndex(0)
   }
@@ -67,10 +81,7 @@ export function QuizScreen({ onFinish }: QuizScreenProps) {
   return (
     <div className="flex flex-col">
       <ProgressBar current={currentIndex + 1} total={questions.length} />
-      <div
-        className="px-6 py-7 sm:px-8"
-        style={{ background: "#fef5e6" }}
-      >
+      <div className="px-6 py-7 sm:px-8" style={{ background: "#fef5e6" }}>
         <QuestionCard
           question={questions[currentIndex]}
           selectedValue={answers[currentIndex]}

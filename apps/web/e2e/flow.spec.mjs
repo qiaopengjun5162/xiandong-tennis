@@ -109,6 +109,19 @@ async function runTest() {
       if (i < 15) {
         await page.waitForSelector(`text=第 ${i + 2} / 16 题`, { timeout: TIMEOUT })
       }
+
+      // After Q5 (i=4), test prev + re-answer flow
+      if (i === 4) {
+        await page.getByRole("button", { name: "上一题" }).click()
+        await page.waitForSelector("text=第 5 / 16 题", { timeout: TIMEOUT })
+        // Verify previously selected answer is checked
+        const checked = await page.locator("input[type=radio]:checked").count()
+        if (checked !== 1) throw new Error(`Expected 1 checked after prev, got ${checked}`)
+        // Click a different option; should auto-advance to Q6 after 400ms
+        const q5radios = await page.locator("input[type=radio]").all()
+        await q5radios[2].click()
+        await page.waitForSelector("text=第 6 / 16 题", { timeout: TIMEOUT })
+      }
     }
 
     // Result page
