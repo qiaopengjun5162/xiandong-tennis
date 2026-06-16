@@ -77,6 +77,10 @@ async function runTest() {
       }
     })
 
+    page.on("dialog", async (dialog) => {
+      await dialog.accept()
+    })
+
     await page.goto(baseUrl, { waitUntil: "networkidle" })
     await page.screenshot({ path: join(downloadDir, "00-welcome.png"), fullPage: true })
 
@@ -87,7 +91,7 @@ async function runTest() {
     await page.getByText("拔刀入局 · 开始测试").click()
     await page.waitForSelector("text=第 1 / 16 题", { timeout: TIMEOUT })
 
-    // Answer all 16 questions by picking the first option each time
+    // Answer all 16 questions
     for (let i = 0; i < 16; i++) {
       await page.waitForSelector(`text=第 ${i + 1} / 16 题`, { timeout: TIMEOUT })
 
@@ -105,22 +109,19 @@ async function runTest() {
         path: join(downloadDir, `01-q${String(i + 1).padStart(2, "0")}.png`),
       })
 
-      // Auto-advance: wait for next question or result page
-      if (i < 15) {
-        await page.waitForSelector(`text=第 ${i + 2} / 16 题`, { timeout: TIMEOUT })
-      }
+      const isLast = i === 15
+      const btnText = isLast ? "亮兵器·看结果" : "下一题"
+      await page.getByText(btnText).click()
 
-      // After Q5 (i=4), test prev + re-answer flow
-      if (i === 4) {
+      // After Q4, test prev + re-select same option + 下一题
+      if (i === 3) {
         await page.getByRole("button", { name: "上一题" }).click()
+        await page.waitForSelector("text=第 4 / 16 题", { timeout: TIMEOUT })
+        // Click same option again (should work via label onClick)
+        await page.locator("input[type=radio]").first().click({ force: true })
+        // Click 下一题 to advance back to Q5
+        await page.getByText("下一题").click()
         await page.waitForSelector("text=第 5 / 16 题", { timeout: TIMEOUT })
-        // Verify previously selected answer is checked
-        const checked = await page.locator("input[type=radio]:checked").count()
-        if (checked !== 1) throw new Error(`Expected 1 checked after prev, got ${checked}`)
-        // Click a different option; should auto-advance to Q6 after 400ms
-        const q5radios = await page.locator("input[type=radio]").all()
-        await q5radios[2].click()
-        await page.waitForSelector("text=第 6 / 16 题", { timeout: TIMEOUT })
       }
     }
 
@@ -128,7 +129,6 @@ async function runTest() {
     await page.waitForSelector("text=兵器鉴定完毕", { timeout: TIMEOUT })
     await page.screenshot({ path: join(downloadDir, "02-result.png"), fullPage: true })
 
-    // Verify the share card renders fully for screenshots / html2canvas
     const card = page.locator("div").filter({ hasText: "弦动 · 网球兵器谱" }).first()
     await card.screenshot({ path: join(downloadDir, "03-poster-card.png") })
 

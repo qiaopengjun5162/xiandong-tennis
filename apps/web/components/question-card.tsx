@@ -33,6 +33,7 @@ export function QuestionCard({
             <label
               key={inputId}
               htmlFor={inputId}
+              onClick={() => onSelect(value)}
               className="flex cursor-pointer items-center gap-4 rounded-full px-5 py-3 transition hover:translate-x-1"
               style={{
                 background: checked ? "#fff2e0" : "white",
