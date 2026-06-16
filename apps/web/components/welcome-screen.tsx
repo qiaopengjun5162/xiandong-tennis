@@ -1,8 +1,21 @@
+"use client"
+
+import { useEffect, useState } from "react"
+import { fetchStats } from "@/lib/api"
+
 interface WelcomeScreenProps {
   onStart: () => void
 }
 
 export function WelcomeScreen({ onStart }: WelcomeScreenProps) {
+  const [total, setTotal] = useState<number | null>(null)
+
+  useEffect(() => {
+    fetchStats().then((stats) => {
+      if (stats) setTotal(stats.total)
+    })
+  }, [])
+
   return (
     <div className="flex flex-col">
       <div
@@ -47,6 +60,14 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps) {
         >
           🎾 约球前请出示兵器谱
         </div>
+        {total !== null && total > 0 && (
+          <p
+            className="mb-4 text-sm"
+            style={{ color: "#9b6e3a" }}
+          >
+            已有 {total} 位球友亮出兵器
+          </p>
+        )}
         <p className="mb-10 max-w-md text-base" style={{ color: "#3a2a1a" }}>
           16 道题，测出你在球场上是铁壁、战锤、匕首还是随缘地雷。
           截图发朋友圈，看看队友是什么兵器。

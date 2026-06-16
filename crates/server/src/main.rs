@@ -1,6 +1,8 @@
-use axum::{routing::post, Router};
+use axum::{routing::get, routing::post, Json, Router};
+use serde_json::json;
 use std::net::SocketAddr;
 use tower_http::cors::CorsLayer;
+use tower_http::trace::TraceLayer;
 use tracing::info;
 use xiandong_server::{config::Config, routes, state::AppState};
 
@@ -13,7 +15,6 @@ async fn main() {
         .await
         .expect("failed to connect to database");
 
-    // Run embedded migrations so the schema is up to date on startup.
     sqlx::migrate!("./migrations")
         .run(&state.db)
         .await
@@ -21,12 +22,20 @@ async fn main() {
 
     let app = Router::new()
         .route("/api/results", post(routes::results::create_result))
+        .route("/api/results/stats", get(routes::stats::get_stats))
+        .route("/api/results/latest", get(routes::stats::get_latest))
+        .route("/health", get(health_check))
         .layer(CorsLayer::permissive())
+        .layer(TraceLayer::new_for_http())
         .with_state(state);
 
-    let addr = SocketAddr::from(([127, 0, 0, 1], config.port));
+    let addr = SocketAddr::from(([0, 0, 0, 0], config.port));
     info!("server listening on {}", addr);
 
     let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
     axum::serve(listener, app).await.unwrap();
+}
+
+async fn health_check() -> Json<serde_json::Value> {
+    Json(json!({ "status": "ok" }))
 }
