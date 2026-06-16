@@ -4,9 +4,9 @@
 
 ## 当前状态
 
-**阶段**：MVP 已实现并合并到 `main` 分支，开源项目文件已补齐。  
-**仓库**：https://github.com/qiaopengjun5162/xiandong-tennis  
-**分支**：`main`（最新提交 `ecad9cbd`）  
+**阶段**：MVP 已实现并合并到 `main` 分支，开源项目文件已补齐，仓库已公开。  
+**仓库**：https://github.com/qiaopengjun5162/xiandong-tennis（PUBLIC）  
+**分支**：`main`（最新提交待 PR #4 合并后更新）  
 **工作区**：原始目录 `/Users/qiaopengjun/Code/Rust/xiandong-tennis/`
 
 ## 已完成
@@ -37,15 +37,20 @@
   - AGENTS.md
 - [x] CI/CD
   - `.github/workflows/build.yml`
-  - cliff.toml
+  - `cliff.toml`
+  - 修复 `taplo fmt --check` 失败（PR #2）
 - [x] 开源合规
   - MIT LICENSE
   - `.all-contributorsrc`
+  - 仓库已设为 PUBLIC
+- [x] 开发体验
+  - `.pre-commit-config.yaml`（PR #3）
 
 ## 关键文件位置
 
 | 内容 | 路径 |
 |------|------|
+| 项目状态快照 | `PROJECT_STATUS.md` |
 | 项目架构与命令 | `CLAUDE.md` |
 | 开发日志与踩坑记录 | `DEVLOG.md` |
 | 英文 README | `README.md` |
@@ -53,6 +58,7 @@
 | 贡献指南 | `CONTRIBUTING.md` |
 | Agent 提示词 | `AGENTS.md` |
 | CI/CD | `.github/workflows/build.yml` |
+| pre-commit 配置 | `.pre-commit-config.yaml` |
 | 常用命令 | `Justfile` |
 | WASM 核心 | `crates/tennis-core/src/` |
 | 后端 | `crates/server/src/` |
@@ -106,4 +112,9 @@ NEXT_PUBLIC_API_URL=http://localhost:8080
 
 ## 上次会话摘要
 
-2026-06-16：完成 MVP 全部功能，合并 PR #1；补齐开源项目文件（README 中英文、CONTRIBUTING、CODE_OF_CONDUCT、LICENSE、AGENTS、all-contributors、CI/CD、cliff.toml）。
+2026-06-16：
+- 完成 MVP 全部功能，合并 PR #1。
+- 补齐开源项目文件（README 中英文、CONTRIBUTING、CODE_OF_CONDUCT、LICENSE、AGENTS、all-contributors、CI/CD、cliff.toml）。
+- 修复 CI 中 `taplo fmt --check` 失败（PR #2）。
+- 添加 `.pre-commit-config.yaml`（PR #3）。
+- 仓库已设为 PUBLIC。
