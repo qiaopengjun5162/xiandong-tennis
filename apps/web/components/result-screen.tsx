@@ -110,8 +110,20 @@ export function ResultScreen({
     copyToClipboard(getResultUrl(resultType), "link")
   }
 
+  const isWechat =
+    typeof navigator !== "undefined" &&
+    /MicroMessenger/i.test(navigator.userAgent)
+
   const handleSystemShare = async () => {
     if (!info || typeof navigator === "undefined") return
+
+    // WeChat's in-app browser has unreliable navigator.share support for
+    // forwarding to friends, so fall back to copying shareable text.
+    if (isWechat) {
+      await copyToClipboard(buildShareText(info), "text")
+      return
+    }
+
     const shareData = {
       title: `我的网球兵器：${info.name}`,
       text: buildShareText(info),
@@ -192,7 +204,7 @@ export function ResultScreen({
               boxShadow: "0 3px 0 #1a2f24",
             }}
           >
-            🔗 一键分享
+            {isWechat ? "📋 复制分享文案" : "🔗 一键分享"}
           </button>
           <button
             onClick={handleCopyLink}

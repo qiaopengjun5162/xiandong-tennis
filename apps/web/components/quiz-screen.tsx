@@ -24,26 +24,18 @@ export function QuizScreen({ onFinish }: QuizScreenProps) {
     })
   }, [])
 
-  useEffect(() => {
-    if (questions.length === 0) return
-    if (answers[currentIndex] === null) return
-
-    const timer = setTimeout(() => {
-      const finalAnswers = answers.filter((a): a is OptionValue => a !== null)
-      if (finalAnswers.length === questions.length) {
-        calculateResult(finalAnswers).then((resultType) => {
-          onFinish(finalAnswers, resultType)
-        })
-      } else {
-        setCurrentIndex((i) => i + 1)
-      }
-    }, 250)
-
-    return () => clearTimeout(timer)
-  }, [answers, currentIndex, questions.length, onFinish])
-
   const handleSelect = (value: OptionValue) => {
-    setAnswers((prev) => prev.map((a, i) => (i === currentIndex ? value : a)))
+    const nextAnswers = answers.map((a, i) => (i === currentIndex ? value : a))
+    setAnswers(nextAnswers)
+
+    if (currentIndex === questions.length - 1) {
+      const finalAnswers = nextAnswers.filter((a): a is OptionValue => a !== null)
+      calculateResult(finalAnswers).then((resultType) => {
+        onFinish(finalAnswers, resultType)
+      })
+    } else {
+      setCurrentIndex((i) => i + 1)
+    }
   }
 
   const handlePrev = () => {

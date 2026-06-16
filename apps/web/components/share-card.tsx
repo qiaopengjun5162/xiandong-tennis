@@ -22,9 +22,9 @@ export const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
           borderRadius: "48px",
         }}
       >
-        <div className="mb-2 text-6xl">{info.emoji}</div>
+        <div className="mb-4 text-6xl leading-none">{info.emoji}</div>
         <h2
-          className="mb-1 text-3xl font-extrabold sm:text-4xl"
+          className="mb-3 text-3xl font-extrabold leading-tight sm:text-4xl"
           style={{ color: "#b45f2b" }}
         >
           {info.name}

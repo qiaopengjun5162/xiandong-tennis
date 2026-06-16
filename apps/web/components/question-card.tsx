@@ -6,16 +6,6 @@ interface QuestionCardProps {
   onSelect: (value: OptionValue) => void
 }
 
-function getOptionLabel(opt: Question["options"][number]): string {
-  if (Array.isArray(opt)) return opt[0]
-  return (opt as { 0: string })[0]
-}
-
-function getOptionValue(opt: Question["options"][number]): OptionValue {
-  if (Array.isArray(opt)) return opt[1]
-  return (opt as { 1: OptionValue })[1]
-}
-
 export function QuestionCard({
   question,
   selectedValue,
@@ -36,15 +26,13 @@ export function QuestionCard({
       </div>
 
       <div className="mb-8 flex flex-col gap-3">
-        {question.options.map((opt, idx) => {
-          const value = getOptionValue(opt)
-          const label = getOptionLabel(opt)
+        {question.options.map(([label, value], idx) => {
           const checked = selectedValue === value
           const inputId = `opt_${question.id}_${value}_${idx}`
           return (
-            <div
+            <label
               key={inputId}
-              onClick={() => onSelect(value)}
+              htmlFor={inputId}
               className="flex cursor-pointer items-center gap-4 rounded-full px-5 py-3 transition hover:translate-x-1"
               style={{
                 background: checked ? "#fff2e0" : "white",
@@ -66,15 +54,13 @@ export function QuestionCard({
                   boxShadow: checked ? "inset 0 0 0 4px white" : "none",
                 }}
               />
-              <label
-                htmlFor={inputId}
-                className="flex-1 cursor-pointer text-base sm:text-lg"
+              <span
+                className="flex-1 text-base sm:text-lg"
                 style={{ color: "#3a2a1a", fontWeight: 500 }}
-                onClick={(e) => e.stopPropagation()}
               >
                 {label}
-              </label>
-            </div>
+              </span>
+            </label>
           )
         })}
       </div>
