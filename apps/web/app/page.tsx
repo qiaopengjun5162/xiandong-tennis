@@ -1,19 +1,38 @@
-import { Button } from "@/components/ui/button"
+'use client';
 
-export default function Page() {
+import { useState } from 'react';
+import { WelcomeScreen } from '@/components/welcome-screen';
+import { QuizScreen } from '@/components/quiz-screen';
+import { ResultScreen } from '@/components/result-screen';
+import type { OptionValue } from '@xiandong/core';
+
+type AppState =
+  | { kind: 'welcome' }
+  | { kind: 'quiz' }
+  | { kind: 'result'; answers: OptionValue[]; resultType: string };
+
+export default function Home() {
+  const [state, setState] = useState<AppState>({ kind: 'welcome' });
+
+  const startQuiz = () => setState({ kind: 'quiz' });
+
+  const finishQuiz = (answers: OptionValue[], resultType: string) => {
+    setState({ kind: 'result', answers, resultType });
+  };
+
+  const restart = () => setState({ kind: 'welcome' });
+
   return (
-    <div className="flex min-h-svh p-6">
-      <div className="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
-        <div>
-          <h1 className="font-medium">Project ready!</h1>
-          <p>You may now add components and start building.</p>
-          <p>We&apos;ve already added the button component for you.</p>
-          <Button className="mt-2">Button</Button>
-        </div>
-        <div className="font-mono text-xs text-muted-foreground">
-          (Press <kbd>d</kbd> to toggle dark mode)
-        </div>
-      </div>
-    </div>
-  )
+    <main className="min-h-screen bg-[#0a0a0a] text-[#e0e0e0] font-sans">
+      {state.kind === 'welcome' && <WelcomeScreen onStart={startQuiz} />}
+      {state.kind === 'quiz' && <QuizScreen onFinish={finishQuiz} />}
+      {state.kind === 'result' && (
+        <ResultScreen
+          answers={state.answers}
+          resultType={state.resultType}
+          onRestart={restart}
+        />
+      )}
+    </main>
+  );
 }
