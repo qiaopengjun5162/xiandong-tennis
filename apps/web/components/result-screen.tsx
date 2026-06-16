@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import html2canvas from "html2canvas"
 import { ShareCard } from "./share-card"
+import { Confetti } from "./confetti"
 import { getPersonalityInfo } from "@/lib/wasm"
 import { submitResult } from "@/lib/api"
 import type { OptionValue, PersonalityInfo } from "@xiandong/core"
@@ -153,6 +154,7 @@ export function ResultScreen({
 
   return (
     <div className="flex flex-col">
+      <Confetti />
       <div className="px-6 py-4 text-center" style={{ background: "#ecd9b4" }}>
         <div
           className="text-sm font-bold sm:text-base"

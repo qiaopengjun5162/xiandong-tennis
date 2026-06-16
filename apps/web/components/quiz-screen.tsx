@@ -35,9 +35,7 @@ export function QuizScreen({ onFinish }: QuizScreenProps) {
 
   const advance = async () => {
     if (currentIndex === questions.length - 1) {
-      const finalAnswers = answers.filter(
-        (a): a is OptionValue => a !== null
-      )
+      const finalAnswers = answers.filter((a): a is OptionValue => a !== null)
       const resultType = await calculateResult(finalAnswers)
       onFinish(finalAnswers, resultType)
     } else {
