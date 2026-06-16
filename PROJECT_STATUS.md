@@ -4,9 +4,10 @@
 
 ## 当前状态
 
-**阶段**：MVP 已实现并合并到 `main` 分支，开源项目文件已补齐，仓库已公开。  
+**阶段**：CI 全绿，GitHub Pages 部署 workflow 已添加，等待上线。  
 **仓库**：https://github.com/qiaopengjun5162/xiandong-tennis（PUBLIC）  
-**分支**：`main`（最新提交待 PR #4 合并后更新）  
+**线上地址**：https://qiaopengjun5162.github.io/xiandong-tennis/（PR #7 合并后生效）  
+**分支**：`main`（`5d534da4`）  
 **工作区**：原始目录 `/Users/qiaopengjun/Code/Rust/xiandong-tennis/`
 
 ## 已完成
