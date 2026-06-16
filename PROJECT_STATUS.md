@@ -4,10 +4,10 @@
 
 ## 当前状态
 
-**阶段**：前端视觉已复刻为 `网球项目/tennis_weapon.html` 风格，本地构建与 Rust 检查全绿，等待浏览器流程验证与推送。  
+**阶段**：前端视觉已复刻并修复选项渲染问题，本地 E2E 流程测试通过，已推送到 GitHub 等待 CI/Pages 部署更新。  
 **仓库**：https://github.com/qiaopengjun5162/xiandong-tennis（PUBLIC）  
-**线上地址**：https://qiaopengjun5162.github.io/xiandong-tennis/（PR #7 合并后生效，需重新部署才会更新）  
-**分支**：`main`（`d2cd50e1`）  
+**线上地址**：https://qiaopengjun5162.github.io/xiandong-tennis/（PR #7 合并后生效，已推送最新 `7669a5fb` 等待部署）  
+**分支**：`main`（`7669a5fb`）  
 **工作区**：原始目录 `/Users/qiaopengjun/Code/Rust/xiandong-tennis/`
 
 ## 已完成
@@ -22,6 +22,8 @@
   - html2canvas 分享海报
   - 静态构建成功
   - 视觉已复刻为 `网球项目/tennis_weapon.html` 风格（米色羊皮纸、深绿头部、铜色强调、胶囊选项）
+  - 修复 WASM 选项渲染（tuple → `[label, value]`）和 radio 单选问题
+  - 新增本地 E2E 流程测试（`apps/web/e2e/flow.spec.mjs`）
 - [x] Axum 后端（`crates/server`）
   - `POST /api/results` 接口
   - PostgreSQL 持久化
@@ -66,6 +68,7 @@
 | 后端 | `crates/server/src/` |
 | 前端 | `apps/web/` |
 | 共享类型 | `packages/core/src/index.ts` |
+| E2E 流程测试 | `apps/web/e2e/flow.spec.mjs` |
 
 ## 验证结果
 
@@ -73,18 +76,19 @@
 - `cargo clippy --all-targets --all-features --tests --benches -- -D warnings`：通过
 - `pnpm build`（前端静态构建）：成功
 - `pnpm tsc --noEmit`：通过
+- `node apps/web/e2e/flow.spec.mjs`：通过（欢迎页 → 16 题 → 结果页 → 生成兵器卡按钮）
 - 后端 API 联调：本地 PostgreSQL 上 `POST /api/results` 返回 `{"id":1,"resultType":"SHIELD","createdAt":"..."}`
 
 ## 已知问题
 
 - Docker Hub 在本地无法访问（Bad Gateway），开发中使用的是本地 Homebrew PostgreSQL。
 - 前端 WASM 加载使用 `/* webpackIgnore: true */` + `// @ts-ignore`，这是为了绕过 Turbopack 对 `public/pkg` 下 JS 模块的打包限制。
+- html2canvas 在 headless Chrome 中会报 `unsupported color function "lab"` 警告（来自 shadcn CSS 变量），不影响当前按钮状态验证，但可能导致海报截图中出现颜色偏差。
 
 ## 待办
 
-- [ ] 浏览器中完整跑一遍答题流程
-- [ ] 验证分享海报下载
-- [ ] 推送 `main` 到 GitHub 并验证 CI / GitHub Pages 部署
+- [ ] 验证 GitHub Actions build / deploy 最新提交是否全绿
+- [ ] 在真实浏览器中手动验证线上海报下载和截图效果
 - [ ] 补充前端测试（可选）
 
 ## 常用命令
@@ -97,6 +101,14 @@ just test        # 运行 Rust 测试
 just fmt         # 格式化 Rust + TOML
 just clippy      # 静态检查
 just check-all   # fmt + clippy + test
+```
+
+运行本地 E2E：
+
+```bash
+cd apps/web
+pnpm build
+node e2e/flow.spec.mjs
 ```
 
 ## 环境变量
@@ -116,5 +128,7 @@ NEXT_PUBLIC_API_URL=http://localhost:8080
 
 2026-06-16：
 - 前端视觉复刻为上级目录 `网球项目/tennis_weapon.html` 风格，替换默认 shadcn 暗色主题。
-- 提交 `d2cd50e1`：8 个前端文件更新，367 行变更。
-- `pnpm build`、`pnpm tsc --noEmit`、`just check-all` 全部通过。
+- 修复 WASM 返回 options 为 tuple 数组导致的选项空白和 radio 全选问题。
+- 新增 `apps/web/e2e/flow.spec.mjs`，使用系统 Chrome + `playwright-core` 自动跑完整答题流程。
+- 提交 `7669a5fb` 并推送到 GitHub。
+- `pnpm build`、`pnpm tsc --noEmit`、E2E 测试全部通过。
