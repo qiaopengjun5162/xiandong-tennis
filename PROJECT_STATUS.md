@@ -4,10 +4,10 @@
 
 ## 当前状态
 
-**阶段**：答题交互改为自动下一题，结果页新增链接分享与系统分享，html2canvas 颜色问题已修复，本地 E2E 通过，已推送到 GitHub。  
+**阶段**：已修复海报名字不显示和底部截断问题，修复 CI lint，本地 typecheck / lint / build / E2E 全绿，已推送到 GitHub 等待 CI/Pages 部署。  
 **仓库**：https://github.com/qiaopengjun5162/xiandong-tennis（PUBLIC）  
-**线上地址**：https://qiaopengjun5162.github.io/xiandong-tennis/（已推送最新 `a6d9f34a` 等待 Pages 部署）  
-**分支**：`main`（`a6d9f34a`）  
+**线上地址**：https://qiaopengjun5162.github.io/xiandong-tennis/（已推送最新 `90794c2d` 等待 Pages 部署）  
+**分支**：`main`（`90794c2d`）  
 **工作区**：原始目录 `/Users/qiaopengjun/Code/Rust/xiandong-tennis/`
 
 ## 已完成
@@ -26,6 +26,7 @@
   - 答题选中后自动跳转下一题，保留「上一题」和「重测」
   - 结果页支持复制分享文案、复制结果链接、一键系统分享（navigator.share）
   - 支持通过 URL 参数 `?r=KEY` 直接查看结果
+  - 修复下载海报 PNG 中名字不显示和底部截断问题
   - 新增本地 E2E 流程测试（`apps/web/e2e/flow.spec.mjs`）
 - [x] Axum 后端（`crates/server`）
   - `POST /api/results` 接口
@@ -78,8 +79,9 @@
 - `cargo test --workspace`：17 个测试通过
 - `cargo clippy --all-targets --all-features --tests --benches -- -D warnings`：通过
 - `pnpm build`（前端静态构建）：成功
-- `pnpm tsc --noEmit`：通过
-- `node apps/web/e2e/flow.spec.mjs`：通过（欢迎页 → 16 题自动跳转 → 结果页 → 下载兵器卡 / 复制文案 / 复制链接）
+- `pnpm typecheck`：通过
+- `pnpm lint`：通过
+- `node apps/web/e2e/flow.spec.mjs`：通过（欢迎页 → 16 题自动跳转 → 结果页 → 下载兵器卡 / 复制文案 / 复制链接 / 卡片截图完整）
 - 后端 API 联调：本地 PostgreSQL 上 `POST /api/results` 返回 `{"id":1,"resultType":"SHIELD","createdAt":"..."}`
 
 ## 已知问题
@@ -89,7 +91,7 @@
 
 ## 待办
 
-- [ ] 验证 GitHub Actions build / deploy 最新提交是否全绿
+- [ ] 等待 GitHub Actions build / deploy 最新提交全绿
 - [ ] 在真实移动浏览器中手动验证一键系统分享和海报下载
 - [ ] 补充前端测试（可选）
 
@@ -129,9 +131,7 @@ NEXT_PUBLIC_API_URL=http://localhost:8080
 ## 上次会话摘要
 
 2026-06-16：
-- 答题交互改为选中后自动跳转下一题，移除「下一题」按钮，保留「上一题」和「重测」。
-- 结果页新增复制分享文案、复制结果链接、一键系统分享（navigator.share）。
-- 支持通过 URL 参数 `?r=KEY` 直接查看结果，方便把链接发给别人。
-- 修复 html2canvas 因 shadcn oklch/lab CSS 变量导致的报错，下载兵器卡 PNG 现在可用。
-- 提交 `a6d9f34a` 并推送到 GitHub。
-- `pnpm build`、`pnpm tsc --noEmit`、E2E 测试全部通过。
+- 修复海报 PNG 中名字不显示（去掉 gradient / background-clip）和底部截断（去掉 overflow-hidden）。
+- 修复 CI lint：page.tsx 不再在 effect 中 setState，lint 脚本忽略 dist/ 和 public/pkg/。
+- 提交 `90794c2d` 并推送到 GitHub。
+- 本地 `pnpm typecheck`、`pnpm lint`、`pnpm build`、E2E 全部通过。
