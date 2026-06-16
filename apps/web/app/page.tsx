@@ -1,9 +1,10 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { WelcomeScreen } from "@/components/welcome-screen"
 import { QuizScreen } from "@/components/quiz-screen"
 import { ResultScreen } from "@/components/result-screen"
+import { loadWasm } from "@/lib/wasm"
 import type { OptionValue } from "@xiandong/core"
 
 type AppState =
@@ -21,6 +22,14 @@ function getInitialState(): AppState {
 
 export default function Home() {
   const [state, setState] = useState<AppState>(getInitialState)
+
+  useEffect(() => {
+    if (state.kind === "welcome") {
+      loadWasm().catch(() => {
+        // Preload failure is non-fatal; QuizScreen will retry on demand.
+      })
+    }
+  }, [state.kind])
 
   const startQuiz = () => setState({ kind: "quiz" })
 

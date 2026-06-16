@@ -14,8 +14,11 @@ export async function loadWasm(): Promise<WasmModule> {
   // webpackIgnore keeps the bundler from trying to resolve the WASM glue at build time;
   // the browser loads it from the public URL at runtime.
   // basePath prefix ensures the path is correct on GitHub Pages sub-path deployments.
-  const wasmPath = (process.env.NEXT_PUBLIC_BASE_PATH ?? "") + "/pkg/xiandong_tennis_core.js"
-  const mod = (await import(/* webpackIgnore: true */ /* @vite-ignore */ wasmPath)) as WasmModule
+  const wasmPath =
+    (process.env.NEXT_PUBLIC_BASE_PATH ?? "") + "/pkg/xiandong_tennis_core.js"
+  const mod = (await import(
+    /* webpackIgnore: true */ /* @vite-ignore */ wasmPath
+  )) as WasmModule
   await mod.default()
   wasmModule = mod
   return mod
