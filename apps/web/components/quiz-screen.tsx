@@ -25,11 +25,15 @@ export function QuizScreen({ onFinish }: QuizScreenProps) {
   }, [])
 
   const handleSelect = (value: OptionValue) => {
+    if (answers[currentIndex] === value) return
+
     const nextAnswers = answers.map((a, i) => (i === currentIndex ? value : a))
     setAnswers(nextAnswers)
 
     if (currentIndex === questions.length - 1) {
-      const finalAnswers = nextAnswers.filter((a): a is OptionValue => a !== null)
+      const finalAnswers = nextAnswers.filter(
+        (a): a is OptionValue => a !== null
+      )
       calculateResult(finalAnswers).then((resultType) => {
         onFinish(finalAnswers, resultType)
       })
@@ -63,7 +67,10 @@ export function QuizScreen({ onFinish }: QuizScreenProps) {
   return (
     <div className="flex flex-col">
       <ProgressBar current={currentIndex + 1} total={questions.length} />
-      <div className="px-6 py-7 sm:px-8" style={{ background: "#fef5e6" }}>
+      <div
+        className="px-6 py-7 sm:px-8"
+        style={{ background: "#fef5e6" }}
+      >
         <QuestionCard
           question={questions[currentIndex]}
           selectedValue={answers[currentIndex]}
