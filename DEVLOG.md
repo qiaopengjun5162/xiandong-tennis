@@ -82,10 +82,28 @@ Error response from daemon: Get "https://registry-1.docker.io/v2/": Bad Gateway
 **原因：**
 OrbStack 虽已启动，但 daemon 访问 Docker Hub 时遇到网关错误；本地 7890 代理对 Docker daemon 无效。
 
-**状态：**
-尚未解决。后端代码已编译通过，联调需在 Docker 镜像可拉取后执行 `just server`。
+**解决：**
+改用本地 Homebrew 安装的 PostgreSQL 17。发现 5432 端口已被占用，使用现有实例并创建 `xiandong` 用户/数据库。后端联调成功：
+```bash
+DATABASE_URL=postgres://xiandong:xiandong@localhost:5432/xiandong cargo run -p xiandong-server
+curl -X POST http://localhost:8080/api/results -d '{"answers":[...],"result_type":"SHIELD"}'
+# 返回 {"createdAt":"...","id":1,"resultType":"SHIELD"}
+```
 
-#### 7. 前端 dist 目录被误提交
+#### 7. GitHub push 失败：历史提交中包含 >100MB 的 node_modules 文件
+
+**现象：**
+```
+remote: error: File node_modules/.../next-swc.darwin-arm64.node is 116.10 MB; this exceeds GitHub's file size limit
+```
+
+**原因：**
+早期提交误把 `node_modules` 纳入版本控制，即使后续 `.gitignore` 已修复，历史记录里仍有大文件。
+
+**解决：**
+使用 `git filter-branch` 重写历史，移除所有 `node_modules`、`dist`、`.next` 目录，然后 `--force-with-lease` 推送。随后创建 PR #1。
+
+#### 8. 前端 dist 目录被误提交
 
 **现象：**
 `pnpm build` 后 `apps/web/dist/` 被 `git add -A` 提交。
@@ -109,12 +127,17 @@ VS Code / Prettier 在保存时自动将单引号改为双引号、调整 import
 
 ### 待办
 
-- [ ] Docker 镜像拉取正常后，启动 PostgreSQL 并跑通后端联调
+- [x] 后端联调（本地 PostgreSQL）
+- [x] 创建 GitHub 仓库并提交 PR #1
 - [ ] 在浏览器中完成一次完整答题流程验证
 - [ ] 验证分享海报下载
-- [ ] 验证后端 `results` 表有数据写入
 - [ ] 配置 CI/CD（GitHub Actions）
 - [ ] 部署到服务器或静态托管
+
+### 参考链接
+
+- PR #1: https://github.com/qiaopengjun5162/xiandong-tennis/pull/1
+- 仓库: https://github.com/qiaopengjun5162/xiandong-tennis
 
 ### 常用命令速查
 
