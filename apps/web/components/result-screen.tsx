@@ -5,6 +5,7 @@ import html2canvas from 'html2canvas';
 import { Button } from '@/components/ui/button';
 import { ShareCard } from './share-card';
 import { getPersonalityInfo } from '@/lib/wasm';
+import { submitResult } from '@/lib/api';
 import type { OptionValue, PersonalityInfo } from '@xiandong/core';
 
 interface ResultScreenProps {
@@ -18,12 +19,15 @@ export function ResultScreen({ resultType, onRestart }: ResultScreenProps) {
   const [generating, setGenerating] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
-  // Load personality info once the result key is known.
+  // Load personality info once the result key is known, then submit to backend.
   useEffect(() => {
     getPersonalityInfo(resultType).then((data) => {
-      if (data) setInfo(data);
+      if (data) {
+        setInfo(data);
+        submitResult(answers, resultType);
+      }
     });
-  }, [resultType]);
+  }, [resultType, answers]);
 
   const handleShare = async () => {
     if (!cardRef.current) return;
