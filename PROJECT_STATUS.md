@@ -5,7 +5,7 @@
 **阶段**：前端完成，已上线 GitHub Pages。后端完成开发，等有服务器后部署。
 **仓库**：https://github.com/qiaopengjun5162/xiandong-tennis（PUBLIC）
 **线上地址**：https://qiaopengjun5162.github.io/xiandong-tennis/
-**分支**：`main`（`6c101d57`）
+**分支**：`main`（`cad8b264`）
 
 ## 前端
 
@@ -24,6 +24,11 @@
 - `GET /api/results/stats` — 兵器分布统计
 - `GET /api/results/latest` — 最近 10 条
 - `GET /health` — 健康检查
+
+## 文档
+
+- CONTRIBUTING.md — 贡献指南（含项目结构和开发命令）
+- CODE_OF_CONDUCT.md — Contributor Covenant 2.1
 
 ## 验证
 
