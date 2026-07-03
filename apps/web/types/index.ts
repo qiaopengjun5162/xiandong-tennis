@@ -1,5 +1,6 @@
 export type {
   OptionValue,
+  AnswerSlot,
   Question,
   PersonalityInfo,
   WeaponType,
