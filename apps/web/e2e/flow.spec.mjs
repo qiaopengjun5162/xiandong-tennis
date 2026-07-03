@@ -39,8 +39,10 @@ function startStaticServer() {
     }
   })
 
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
+    server.once("error", reject)
     server.listen(0, "127.0.0.1", () => {
+      server.off("error", reject)
       const addr = server.address()
       resolve({ server, url: `http://127.0.0.1:${addr.port}/xiandong-tennis/` })
     })
@@ -59,10 +61,23 @@ async function runTest() {
     const page = await browser.newPage()
 
     const errors = []
+    const submittedResults = []
     const ignoredPatterns = [
       /ERR_CONNECTION_REFUSED/,
       /unsupported color function "lab"/,
     ]
+    await page.route("**/api/results", async (route) => {
+      submittedResults.push(JSON.parse(route.request().postData() ?? "{}"))
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          id: 1,
+          resultType: "SHIELD",
+          createdAt: new Date().toISOString(),
+        }),
+      })
+    })
     page.on("pageerror", (err) => {
       if (!ignoredPatterns.some((p) => p.test(err.message))) errors.push(err.message)
     })
@@ -129,6 +144,21 @@ async function runTest() {
 
     // Result page
     await page.waitForSelector("text=兵器鉴定完毕", { timeout: TIMEOUT })
+    for (let attempt = 0; attempt < 50 && submittedResults.length === 0; attempt++) {
+      await page.waitForTimeout(100)
+    }
+    if (submittedResults.length !== 1) {
+      throw new Error(`Expected one result submission, got ${submittedResults.length}`)
+    }
+    if (submittedResults[0].answers.length !== 16) {
+      throw new Error(`Expected 16 submitted answers, got ${submittedResults[0].answers.length}`)
+    }
+    if (submittedResults[0].answers[2] !== null) {
+      throw new Error("Expected skipped Q3 to be submitted as null")
+    }
+    if (submittedResults[0].answers[15] !== "A") {
+      throw new Error("Expected final question answer to be submitted")
+    }
     await page.screenshot({ path: join(downloadDir, "02-result.png"), fullPage: true })
 
     const card = page.locator("div").filter({ hasText: "弦动 · 网球兵器谱" }).first()

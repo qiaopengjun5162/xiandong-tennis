@@ -21,7 +21,7 @@
 - 8 种人格结果：铁壁盾卫、狂怒战斧、影刃刺客、摆烂地雷、万能军刀、狂乱链枷、冲锋骑枪、禅意太刀。
 - Rust WASM 核心跨端复用。
 - 使用 `html2canvas` 生成分享海报。
-- 后端通过 Axum + sqlx + PostgreSQL 记录结果。
+- 后端通过 Axum + sqlx + PostgreSQL 记录结果，并在入库前按答案重新计算校验结果类型。
 
 ## 快速开始
 
@@ -77,6 +77,8 @@ just fmt         # 格式化 Rust + TOML
 just clippy      # 运行 Clippy 检查
 just check-all   # fmt + clippy + test
 ```
+
+跳过题会以 `null` 槽位提交，因此每条记录都保留固定 16 题结构；计分仍只统计有效的 `A`/`B`/`C`/`D` 答案。
 
 ## 贡献
 

@@ -28,7 +28,7 @@ The project is intentionally split so that the core logic can be reused across W
 - 8 personality results: Shield, Hammer, Dagger, Potato, Swiss Knife, Chain Mace, Lance, Katana.
 - Rust WASM core shared across platforms.
 - Share poster generation via `html2canvas`.
-- Backend result recording with Axum + sqlx + PostgreSQL.
+- Backend result recording with Axum + sqlx + PostgreSQL; the API recomputes the result from submitted answers before persisting.
 
 ## Quick Start
 
@@ -84,6 +84,8 @@ just fmt         # Format Rust + TOML
 just clippy      # Run Clippy lints
 just check-all   # fmt + clippy + test
 ```
+
+Skipped quiz answers are submitted as `null` slots so every stored result keeps the fixed 16-question shape while scoring still uses only valid `A`/`B`/`C`/`D` answers.
 
 ## Contributing
 

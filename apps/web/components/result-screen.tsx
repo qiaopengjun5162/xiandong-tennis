@@ -6,10 +6,10 @@ import { ShareCard } from "./share-card"
 import { Confetti } from "./confetti"
 import { getPersonalityInfo } from "@/lib/wasm"
 import { submitResult } from "@/lib/api"
-import type { OptionValue, PersonalityInfo } from "@xiandong/core"
+import type { AnswerSlot, PersonalityInfo } from "@xiandong/core"
 
 interface ResultScreenProps {
-  answers: OptionValue[]
+  answers: AnswerSlot[]
   resultType: string
   onRestart: () => void
 }

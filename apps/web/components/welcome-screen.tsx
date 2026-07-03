@@ -61,10 +61,7 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps) {
           🎾 约球前请出示兵器谱
         </div>
         {total !== null && total > 0 && (
-          <p
-            className="mb-4 text-sm"
-            style={{ color: "#9b6e3a" }}
-          >
+          <p className="mb-4 text-sm" style={{ color: "#9b6e3a" }}>
             已有 {total} 位球友亮出兵器
           </p>
         )}

@@ -1,5 +1,60 @@
 # 开发日志 - 弦动 · 网球兵器谱 MVP
 
+## 2026-07-02 会话记录
+
+### 已完成
+
+- 修复答完最后一题时 React 闭包读取旧 `answers`，导致最后一题可能未进入计分/提交的问题。
+- 将前端答案提交调整为固定 16 槽结构；跳过题以 `null` 表示，计分只过滤有效 A/B/C/D。
+- 后端 `POST /api/results` 入库前重新按 `tennis-core` 计算结果，并拒绝与答案不匹配的 `result_type`。
+- 移除 `next/font/google`，改用本地系统中文字体栈，避免生产构建依赖 Google Fonts 网络请求。
+- 更新 README、README.zh.md、CLAUDE.md、AGENTS.md、PROJECT_STATUS.md，记录答案槽位、后端校验和字体构建约束。
+
+### 验证
+
+- `cargo test -p xiandong-server routes::results::tests`：3 passed
+- `cargo fmt --all -- --check`：ok
+- `cargo clippy --all-targets --all-features --tests --benches -- -D warnings`：ok
+- `cargo nextest run --workspace --all-features`：20 passed
+- `apps/web/node_modules/.bin/tsc --noEmit --project apps/web/tsconfig.json`：ok
+- `cd apps/web && ./node_modules/.bin/eslint . --ignore-pattern dist --ignore-pattern public/pkg`：ok
+- `cd apps/web && ./node_modules/.bin/next build --webpack`：ok
+- `node apps/web/e2e/flow.spec.mjs`：ok（需允许本地监听 `127.0.0.1` 并启动 Chrome）
+
+### 遇到的问题与解决方法
+
+#### 1. E2E 脚本读取旧静态产物
+
+**现象：**
+`node apps/web/e2e/flow.spec.mjs` 直接服务 `apps/web/dist`，源码变更后未重新构建时，测试不会覆盖当前源码。
+
+**解决：**
+在 E2E 中补充结果提交拦截断言；后续验证完整前端流程前必须先执行 `pnpm build` 生成新的 `dist`。
+
+#### 2. Google Fonts 导致离线生产构建失败
+
+**现象：**
+`next build` 在受限网络下拉取 `Geist` / `Geist Mono` 失败。
+
+**解决：**
+从 `apps/web/app/layout.tsx` 移除 `next/font/google`，在 `globals.css` 中使用系统中文字体栈。
+
+#### 3. 沙箱限制导致默认 Turbopack 构建和 E2E 端口监听失败
+
+**现象：**
+默认 `next build` 在 Turbopack 处理 CSS 时尝试创建进程并绑定端口，当前受限沙箱返回 `Operation not permitted`；E2E 静态服务器监听 `127.0.0.1` 也会在沙箱中 `listen EPERM`。
+
+**解决：**
+用 Next.js 16 官方支持的 `next build --webpack` 完成生产构建验证；E2E 在允许本地监听和启动 Chrome 的环境中运行。E2E 脚本已添加 server `error` 处理，避免监听失败时假通过。
+
+#### 4. taplo 在当前沙箱中 panic
+
+**现象：**
+`taplo fmt --option reorder_keys=true --check` 触发 `system-configuration` 的 `Attempted to create a NULL object` panic。
+
+**解决：**
+本次未修改 TOML；Rust 与前端 gate 已完整验证。TOML 格式需要在非受限本机环境或 CI 中复核。
+
 ## 2026-06-16 会话记录
 
 ### 已完成

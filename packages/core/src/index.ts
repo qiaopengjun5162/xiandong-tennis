@@ -1,4 +1,5 @@
 export type OptionValue = 'A' | 'B' | 'C' | 'D';
+export type AnswerSlot = OptionValue | null;
 
 export interface Question {
   id: number;

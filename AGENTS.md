@@ -31,6 +31,9 @@
 
 - The WASM glue is loaded from `/pkg/xiandong_tennis_core.js` at runtime; bundlers must ignore it via `/* webpackIgnore: true */`.
 - `apps/web/public/pkg/` is gitignored; developers must run `just wasm` after cloning or pulling core changes.
+- Quiz answers use a fixed 16-slot shape across frontend and backend; skipped answers are represented as `null`, while scoring filters to valid `A`/`B`/`C`/`D` answers.
+- The backend must recompute `result_type` from submitted answers before persisting so stats cannot be polluted by arbitrary client values.
+- The frontend intentionally avoids `next/font/google`; production builds must not require remote Google Fonts access.
 - `sqlx::query_as!` macros are intentionally avoided in the server to remove the compile-time database dependency; schema migrations run automatically on startup.
 - Scoring rules are defined by the product team and documented in `CLAUDE.md`.
 - PR CI jobs must not reference tag-only container actions.

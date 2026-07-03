@@ -4,15 +4,15 @@ import { useEffect, useRef, useState } from "react"
 import { QuestionCard } from "./question-card"
 import { ProgressBar } from "./progress-bar"
 import { calculateResult, getQuestions } from "@/lib/wasm"
-import type { OptionValue, Question } from "@xiandong/core"
+import type { AnswerSlot, OptionValue, Question } from "@xiandong/core"
 
 interface QuizScreenProps {
-  onFinish: (answers: OptionValue[], resultType: string) => void
+  onFinish: (answers: AnswerSlot[], resultType: string) => void
 }
 
 export function QuizScreen({ onFinish }: QuizScreenProps) {
   const [questions, setQuestions] = useState<Question[]>([])
-  const [answers, setAnswers] = useState<(OptionValue | null)[]>([])
+  const [answers, setAnswers] = useState<AnswerSlot[]>([])
   const [currentIndex, setCurrentIndex] = useState(0)
   const [loading, setLoading] = useState(true)
 
@@ -33,11 +33,11 @@ export function QuizScreen({ onFinish }: QuizScreenProps) {
     }
   }
 
-  const advance = async () => {
+  const advance = async (nextAnswers = answers) => {
     if (currentIndex === questions.length - 1) {
-      const finalAnswers = answers.filter((a): a is OptionValue => a !== null)
-      const resultType = await calculateResult(finalAnswers)
-      onFinish(finalAnswers, resultType)
+      const validAnswers = nextAnswers.filter((a): a is OptionValue => a !== null)
+      const resultType = await calculateResult(validAnswers)
+      onFinish(nextAnswers, resultType)
     } else {
       setCurrentIndex((i) => i + 1)
     }
@@ -45,14 +45,16 @@ export function QuizScreen({ onFinish }: QuizScreenProps) {
 
   const handleSelect = (value: OptionValue) => {
     cancelAdvance()
-    setAnswers((prev) => prev.map((a, i) => (i === currentIndex ? value : a)))
-    advanceTimer.current = setTimeout(advance, 300)
+    const nextAnswers = answers.map((a, i) => (i === currentIndex ? value : a))
+    setAnswers(nextAnswers)
+    advanceTimer.current = setTimeout(() => advance(nextAnswers), 300)
   }
 
   const handleSkip = () => {
     cancelAdvance()
-    setAnswers((prev) => prev.map((a, i) => (i === currentIndex ? null : a)))
-    advanceTimer.current = setTimeout(advance, 200)
+    const nextAnswers = answers.map((a, i) => (i === currentIndex ? null : a))
+    setAnswers(nextAnswers)
+    advanceTimer.current = setTimeout(() => advance(nextAnswers), 200)
   }
 
   const handlePrev = () => {

@@ -5,12 +5,12 @@ import { WelcomeScreen } from "@/components/welcome-screen"
 import { QuizScreen } from "@/components/quiz-screen"
 import { ResultScreen } from "@/components/result-screen"
 import { loadWasm } from "@/lib/wasm"
-import type { OptionValue } from "@xiandong/core"
+import type { AnswerSlot } from "@xiandong/core"
 
 type AppState =
   | { kind: "welcome" }
   | { kind: "quiz" }
-  | { kind: "result"; answers: OptionValue[]; resultType: string }
+  | { kind: "result"; answers: AnswerSlot[]; resultType: string }
 
 function getInitialState(): AppState {
   if (typeof window === "undefined") return { kind: "welcome" }
@@ -33,7 +33,7 @@ export default function Home() {
 
   const startQuiz = () => setState({ kind: "quiz" })
 
-  const finishQuiz = (answers: OptionValue[], resultType: string) => {
+  const finishQuiz = (answers: AnswerSlot[], resultType: string) => {
     setState({ kind: "result", answers, resultType })
   }
 

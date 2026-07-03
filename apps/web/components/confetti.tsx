@@ -14,7 +14,13 @@ interface Ball {
   rotation: number
 }
 
-function drawBall(ctx: CanvasRenderingContext2D, x: number, y: number, r: number, rot: number) {
+function drawBall(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  r: number,
+  rot: number
+) {
   ctx.save()
   ctx.translate(x, y)
   ctx.rotate(rot)
@@ -88,15 +94,29 @@ export function Confetti() {
         const r = BALL_RADIUS * b.scale
 
         // Bounce off walls
-        if (b.x - r < 0) { b.x = r; b.vx = Math.abs(b.vx) * BOUNCE }
-        if (b.x + r > w) { b.x = w - r; b.vx = -Math.abs(b.vx) * BOUNCE }
+        if (b.x - r < 0) {
+          b.x = r
+          b.vx = Math.abs(b.vx) * BOUNCE
+        }
+        if (b.x + r > w) {
+          b.x = w - r
+          b.vx = -Math.abs(b.vx) * BOUNCE
+        }
         // Bounce off floor
-        if (b.y + r > h) { b.y = h - r; b.vy = -Math.abs(b.vy) * BOUNCE; b.vx *= 0.8 }
+        if (b.y + r > h) {
+          b.y = h - r
+          b.vy = -Math.abs(b.vy) * BOUNCE
+          b.vx *= 0.8
+        }
         // Bounce off ceiling
-        if (b.y - r < 0) { b.y = r; b.vy = Math.abs(b.vy) * BOUNCE }
+        if (b.y - r < 0) {
+          b.y = r
+          b.vy = Math.abs(b.vy) * BOUNCE
+        }
 
         const fadeIn = Math.min(1, frame / 10)
-        const fadeOut = frame > DURATION - 30 ? Math.max(0, (DURATION - frame) / 30) : 1
+        const fadeOut =
+          frame > DURATION - 30 ? Math.max(0, (DURATION - frame) / 30) : 1
         ctx!.globalAlpha = fadeIn * fadeOut
 
         drawBall(ctx!, b.x, b.y, r, b.rotation)
