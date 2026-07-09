@@ -5,7 +5,7 @@
 **阶段**：前端完成，已上线 GitHub Pages。后端完成开发并补充结果校验，等有服务器后部署。
 **仓库**：https://github.com/qiaopengjun5162/xiandong-tennis（PUBLIC）
 **线上地址**：https://qiaopengjun5162.github.io/xiandong-tennis/
-**分支**：`main`（工作区有本地修复改动，提交前以 `git status --short --branch` 为准）
+**分支**：`main`（`6e67490c`，工作区干净）
 
 ## 前端
 
@@ -30,6 +30,7 @@
 
 - CONTRIBUTING.md — 贡献指南（含项目结构和开发命令）
 - CODE_OF_CONDUCT.md — Contributor Covenant 2.1
+- PR #9 — 答案完整性、后端结果校验、离线字体构建修复，已合并并部署
 
 ## 验证
 
