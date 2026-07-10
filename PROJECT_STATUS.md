@@ -11,7 +11,7 @@
 ## 产品路线
 
 - 当前 MVP：用"网球兵器谱"测试完成传播、兴趣识别、玩家风格标签和结果分享。
-- 下一阶段：部署后端，开始沉淀真实用户结果、地区、水平和约球意向数据。
+- 下一阶段：部署后端，开始沉淀真实用户结果、地区、水平、约球意向和可用场地数据。
 - 后续核心能力：用户档案、约球发布、报名/确认/取消、打球反馈、球友匹配和社区传播。
 - 暂未实现：账号体系、场地/时间选择、约球订单或活动生命周期、聊天通知、支付和真实场馆集成。
 
@@ -32,6 +32,8 @@
 - `POST /api/results` — 提交结果
 - `GET /api/results/stats` — 兵器分布统计
 - `GET /api/results/latest` — 最近 10 条
+- `GET /api/venues` — 场地列表，支持 `area`、`q`、`limit` 查询
+- `GET /api/venues/areas` — 已导入场地片区及数量
 - `GET /health` — 健康检查
 
 ## 文档
@@ -46,19 +48,20 @@
 - PR 模板与 `pr-body` CI gate — 要求每个 PR 写清摘要、影响边界和真实验证命令
 - `docs/frontend-visual-qa.md` — UI 变更截图、交互、响应式和分享海报验收清单
 - `docs/operations/manual-gates.md` — 凭据、非本地数据库、部署、代理/证书、GUI 账号状态和私有产物的人工确认边界
+- `docs/product/venue-directory.md` — 场地库字段映射、导入规则和联系方式隐私边界
 
 ## 验证
 
 - `cargo fmt --all -- --check`：ok（2026-07-03）
 - `cargo clippy --all-targets --all-features --tests --benches -- -D warnings`：ok（2026-07-03）
-- `cargo nextest run --workspace --all-features`：20 passed（2026-07-03）
+- `cargo nextest run --workspace --all-features`：22 passed（2026-07-10）
 - `apps/web/node_modules/.bin/tsc --noEmit --project apps/web/tsconfig.json`：ok（2026-07-03）
 - `cd apps/web && ./node_modules/.bin/eslint . --ignore-pattern dist --ignore-pattern public/pkg`：ok（2026-07-03）
 - `cd apps/web && ./node_modules/.bin/next build --webpack`：ok（2026-07-03）
 - `cd apps/web && pnpm build`：ok（2026-07-10，CI 同款默认 Turbopack 构建）
 - `node apps/web/e2e/flow.spec.mjs`：ok（2026-07-03，需允许本地监听 `127.0.0.1` 并启动 Chrome）
 - `taplo fmt --option reorder_keys=true --check`：当前沙箱会触发 macOS `system-configuration` panic，需在非受限环境或 CI 再确认
-- `just check-all`：ok（2026-07-10，覆盖 Rust fmt/clippy/nextest 与前端 typecheck/lint/WASM/Webpack build）
+- `just check-all`：ok（2026-07-10，22 tests passed，覆盖 Rust fmt/clippy/nextest 与前端 typecheck/lint/WASM/Webpack build）
 - `pnpm pr:check-body`：本地 fixture 验证 ok（2026-07-10）；CI 会在每个 PR 上执行
 - `docs/frontend-visual-qa.md`：文档级流程，随本次 PR body fixture 一起验证
 - `docs/operations/manual-gates.md`：文档级流程，随本次文档 PR 验证

@@ -24,6 +24,8 @@ async fn main() {
         .route("/api/results", post(routes::results::create_result))
         .route("/api/results/stats", get(routes::stats::get_stats))
         .route("/api/results/latest", get(routes::stats::get_latest))
+        .route("/api/venues", get(routes::venues::list_venues))
+        .route("/api/venues/areas", get(routes::venues::list_venue_areas))
         .route("/health", get(health_check))
         .layer(CorsLayer::permissive())
         .layer(TraceLayer::new_for_http())

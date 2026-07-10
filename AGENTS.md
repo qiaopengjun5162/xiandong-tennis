@@ -6,7 +6,7 @@
 - The current production MVP is a tennis personality quiz H5 cold-start entry built with Rust WASM core + Next.js H5 frontend + Axum backend.
 - Business logic (questions, scoring, personality data) lives in `crates/tennis-core` and is exposed via `wasm-bindgen`.
 - `apps/web` is a thin UI shell: it loads the WASM module, renders screens, generates share posters, and talks to the backend.
-- `crates/server` is a small Axum API that persists quiz results to PostgreSQL.
+- `crates/server` is a small Axum API that persists quiz results and venue metadata to PostgreSQL.
 - Do not treat the quiz as the final product boundary; future product work should connect quiz results to player profiles, match invitations, and real tennis sessions.
 
 ## Commands
@@ -48,6 +48,7 @@
 - PRs must fill `.github/PULL_REQUEST_TEMPLATE.md`; CI runs `tools/ci/check-pr-body.mjs` to reject empty template sections and missing validation evidence.
 - UI-affecting PRs must follow `docs/frontend-visual-qa.md` and fill the PR template's `Visual Evidence` section with screenshots, recordings, or a clear "not UI-affecting" note.
 - Workflows touching credentials, non-local databases, production deployment, system proxy/certificates, GUI account state, or generated private artifacts must follow `docs/operations/manual-gates.md`.
+- Venue data imports must follow `docs/product/venue-directory.md`; do not commit raw phone numbers, WeChat IDs, or private booking contacts extracted from screenshots.
 
 ## Change Recording
 
