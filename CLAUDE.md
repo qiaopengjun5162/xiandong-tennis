@@ -84,6 +84,7 @@ pnpm pr:check-body # CI 中校验 PR 模板填写完整
 - 本地受限沙箱内优先用 `next build --webpack` 验证生产构建；CI 仍跑默认 `pnpm build`。
 - PR 必须写清变更摘要、影响边界和验证命令；CI 会拒绝空模板 PR。
 - UI 变更按 `docs/frontend-visual-qa.md` 做截图/录屏验收，并填写 PR 的 `Visual Evidence`。
+- 凭据、非本地数据库、生产部署、系统代理/证书、GUI 账号状态和私有产物按 `docs/operations/manual-gates.md` 走人工确认。
 - 后续微信小程序可复用同一套 WASM 核心。
 
 ## 环境变量

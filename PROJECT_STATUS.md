@@ -36,6 +36,7 @@
 - `just check-all` — 本地完整 gate，覆盖 Rust fmt/clippy/test 与前端 typecheck/lint/WASM/build
 - PR 模板与 `pr-body` CI gate — 要求每个 PR 写清摘要、影响边界和真实验证命令
 - `docs/frontend-visual-qa.md` — UI 变更截图、交互、响应式和分享海报验收清单
+- `docs/operations/manual-gates.md` — 凭据、非本地数据库、部署、代理/证书、GUI 账号状态和私有产物的人工确认边界
 
 ## 验证
 
@@ -51,6 +52,7 @@
 - `just check-all`：ok（2026-07-10，覆盖 Rust fmt/clippy/nextest 与前端 typecheck/lint/WASM/Webpack build）
 - `pnpm pr:check-body`：本地 fixture 验证 ok（2026-07-10）；CI 会在每个 PR 上执行
 - `docs/frontend-visual-qa.md`：文档级流程，随本次 PR body fixture 一起验证
+- `docs/operations/manual-gates.md`：文档级流程，随本次文档 PR 验证
 
 ## 常用命令
 
