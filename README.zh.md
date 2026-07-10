@@ -83,6 +83,8 @@ pnpm pr:check-body # CI 中校验 PR 模板填写完整
 
 跳过题会以 `null` 槽位提交，因此每条记录都保留固定 16 题结构；计分仍只统计有效的 `A`/`B`/`C`/`D` 答案。
 
+涉及 UI 的改动请按 [Frontend Visual QA](docs/frontend-visual-qa.md) 验收，并在 PR 模板中填写视觉证据。
+
 ## 贡献
 
 我们欢迎贡献！请查看 [CONTRIBUTING.md](CONTRIBUTING.md) 了解如何报告问题、提交拉取请求或改进项目。

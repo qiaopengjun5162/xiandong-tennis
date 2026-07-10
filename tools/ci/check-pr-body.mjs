@@ -8,6 +8,7 @@ const requiredSections = [
   "Planning",
   "Area",
   "Validation",
+  "Visual Evidence",
   "Production Boundary",
   "Architecture / Tooling Boundary",
   "Change Recording",
@@ -17,6 +18,7 @@ const emptyTemplateMarkers = [
   "## Summary\n\n## Planning",
   "Branch:\n\n## Area",
   "Commands run:\n\n```text\n\n```",
+  "Notes:\n\n## Production Boundary",
   "Notes:\n\n## Architecture / Tooling Boundary",
 ]
 
@@ -61,6 +63,7 @@ function validatePrBody(body) {
   for (const section of [
     "Planning",
     "Area",
+    "Visual Evidence",
     "Production Boundary",
     "Architecture / Tooling Boundary",
     "Change Recording",

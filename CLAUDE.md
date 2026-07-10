@@ -83,6 +83,7 @@ pnpm pr:check-body # CI 中校验 PR 模板填写完整
 - 前端生产构建不依赖 `next/font/google`，避免 CI/国内网络环境因 Google Fonts 拉取失败。
 - 本地受限沙箱内优先用 `next build --webpack` 验证生产构建；CI 仍跑默认 `pnpm build`。
 - PR 必须写清变更摘要、影响边界和验证命令；CI 会拒绝空模板 PR。
+- UI 变更按 `docs/frontend-visual-qa.md` 做截图/录屏验收，并填写 PR 的 `Visual Evidence`。
 - 后续微信小程序可复用同一套 WASM 核心。
 
 ## 环境变量
