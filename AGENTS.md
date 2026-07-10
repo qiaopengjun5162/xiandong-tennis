@@ -2,10 +2,12 @@
 
 ## Project Shape
 
-- `xiandong-tennis` is a tennis personality quiz MVP built with Rust WASM core + Next.js H5 frontend + Axum backend.
+- `xiandong-tennis` is evolving toward a tennis meetup product for finding partners and arranging real court sessions.
+- The current production MVP is a tennis personality quiz H5 cold-start entry built with Rust WASM core + Next.js H5 frontend + Axum backend.
 - Business logic (questions, scoring, personality data) lives in `crates/tennis-core` and is exposed via `wasm-bindgen`.
 - `apps/web` is a thin UI shell: it loads the WASM module, renders screens, generates share posters, and talks to the backend.
 - `crates/server` is a small Axum API that persists quiz results to PostgreSQL.
+- Do not treat the quiz as the final product boundary; future product work should connect quiz results to player profiles, match invitations, and real tennis sessions.
 
 ## Commands
 
