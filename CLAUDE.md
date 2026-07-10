@@ -9,7 +9,7 @@
 - 核心：Rust + wasm-bindgen（题目、计分、人格数据）
 - 前端：Next.js 16 + TypeScript + Tailwind CSS + shadcn/ui
 - 后端：Rust + Axum + sqlx + PostgreSQL
-- 部署：本地开发（后续上云）
+- 部署：前端 GitHub Pages；后端待服务器部署
 
 ## 架构
 
@@ -63,7 +63,9 @@ just dev         # 一键启动完整环境（手动分别启动）
 just test        # 运行所有 Rust 测试
 just fmt         # 格式化 Rust + TOML
 just clippy      # 运行 Clippy
-just check-all   # 完整提交前检查
+just check-rust  # Rust 格式化 + Clippy + 测试
+just check-web   # 前端类型检查 + lint + WASM 构建 + 生产构建
+just check-all   # Rust + 前端完整提交前检查
 ```
 
 ## 开发工作流
@@ -78,6 +80,7 @@ just check-all   # 完整提交前检查
 - 业务逻辑全部下沉到 Rust WASM。
 - TypeScript 只做 UI 渲染和平台 API 调用。
 - 前端生产构建不依赖 `next/font/google`，避免 CI/国内网络环境因 Google Fonts 拉取失败。
+- 本地受限沙箱内优先用 `next build --webpack` 验证生产构建；CI 仍跑默认 `pnpm build`。
 - 后续微信小程序可复用同一套 WASM 核心。
 
 ## 环境变量

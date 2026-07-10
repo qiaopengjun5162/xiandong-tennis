@@ -20,7 +20,9 @@ just web          # 启动前端 (localhost:3000)
 just test         # 运行 Rust 测试
 just fmt          # 格式化
 just clippy       # Clippy 检查
-just check-all    # 提交前完整检查
+just check-rust   # Rust 格式化 + Clippy + 测试
+just check-web    # 前端类型检查 + lint + WASM 构建 + 生产构建
+just check-all    # Rust + 前端完整提交前检查
 ```
 
 前端开发时如果不需要后端，直接 `cd apps/web && pnpm dev` 即可——答题逻辑全部在 WASM 里运行，不依赖后端。
@@ -68,8 +70,7 @@ When your changes are ready:
 - **Testing**: Ensure your changes do not break any existing functionality. Run the tests before submitting a PR:
 
   ```bash
-  cargo nextest run --workspace --all-features
-  cd apps/web && pnpm build
+  just check-all
   ```
 
   If you add new features, be sure to add relevant tests.
