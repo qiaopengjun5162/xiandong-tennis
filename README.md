@@ -16,6 +16,8 @@
 
 `xiandong-tennis` is a weapon-themed tennis personality quiz H5 app. It identifies a player's "court weapon" through 16 fun questions and generates a shareable poster.
 
+The quiz is not the final product by itself. It is the cold-start entry point for a broader tennis meetup product where players can find partners, arrange matches, and turn online interest into real court sessions.
+
 The project is intentionally split so that the core logic can be reused across Web and future WeChat Mini Program clients:
 
 - **Rust WASM core** (`crates/tennis-core`): questions, scoring, and personality data.
@@ -24,11 +26,20 @@ The project is intentionally split so that the core logic can be reused across W
 
 ## Features
 
+Current MVP:
+
 - 16 weapon-themed tennis questions.
 - 8 personality results: Shield, Hammer, Dagger, Potato, Swiss Knife, Chain Mace, Lance, Katana.
 - Rust WASM core shared across platforms.
 - Share poster generation via `html2canvas`.
 - Backend result recording with Axum + sqlx + PostgreSQL; the API recomputes the result from submitted answers before persisting.
+
+Long-term product direction:
+
+- Player profiles based on level, play style, location, and preferred time slots.
+- Match invitations for singles, doubles, practice sessions, and casual hitting.
+- Flow for creating, joining, confirming, canceling, and reviewing tennis sessions.
+- Community and sharing loops that connect quiz results to real-world tennis meetups.
 
 ## Quick Start
 
