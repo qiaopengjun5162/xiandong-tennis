@@ -14,6 +14,22 @@ permissions:
   contents: write
 
 jobs:
+  pr-body:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Check PR body
+        run: node tools/ci/check-pr-body.mjs
+
   build-rust:
     strategy:
       matrix:

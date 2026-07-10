@@ -23,6 +23,7 @@ just clippy       # Clippy 检查
 just check-rust   # Rust 格式化 + Clippy + 测试
 just check-web    # 前端类型检查 + lint + WASM 构建 + 生产构建
 just check-all    # Rust + 前端完整提交前检查
+pnpm pr:check-body # CI 中校验 PR 描述是否填写完整
 ```
 
 前端开发时如果不需要后端，直接 `cd apps/web && pnpm dev` 即可——答题逻辑全部在 WASM 里运行，不依赖后端。
@@ -62,6 +63,7 @@ When your changes are ready:
 1. Commit your changes with clear, concise commit messages (refer to [Conventional Commits](https://www.conventionalcommits.org/) for guidance).
 2. Push your branch to your fork.
 3. Create a pull request (PR) to the `main` branch of the `xiandong-tennis` repository.
+4. Fill every relevant section in `.github/PULL_REQUEST_TEMPLATE.md`; CI rejects empty summaries, unchecked impact areas, or missing validation commands.
 
 ### 4. Code Style and Testing
 
@@ -79,6 +81,7 @@ When your changes are ready:
 
 - If you improve or add any features, please also update the documentation to reflect the changes.
 - Update `README.md`, `CLAUDE.md`, and `PROJECT_STATUS.md` when relevant.
+- Update `DEVLOG.md` for code, documentation, configuration, build script, or workflow changes.
 - Use clear and concise language. Make sure examples are working.
 
 ---

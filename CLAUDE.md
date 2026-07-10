@@ -66,6 +66,7 @@ just clippy      # 运行 Clippy
 just check-rust  # Rust 格式化 + Clippy + 测试
 just check-web   # 前端类型检查 + lint + WASM 构建 + 生产构建
 just check-all   # Rust + 前端完整提交前检查
+pnpm pr:check-body # CI 中校验 PR 模板填写完整
 ```
 
 ## 开发工作流
@@ -81,6 +82,7 @@ just check-all   # Rust + 前端完整提交前检查
 - TypeScript 只做 UI 渲染和平台 API 调用。
 - 前端生产构建不依赖 `next/font/google`，避免 CI/国内网络环境因 Google Fonts 拉取失败。
 - 本地受限沙箱内优先用 `next build --webpack` 验证生产构建；CI 仍跑默认 `pnpm build`。
+- PR 必须写清变更摘要、影响边界和验证命令；CI 会拒绝空模板 PR。
 - 后续微信小程序可复用同一套 WASM 核心。
 
 ## 环境变量

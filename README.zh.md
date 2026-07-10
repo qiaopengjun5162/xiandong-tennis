@@ -78,6 +78,7 @@ just clippy      # 运行 Clippy 检查
 just check-rust  # Rust 格式化 + Clippy + 测试
 just check-web   # 前端类型检查 + lint + WASM 构建 + 生产构建
 just check-all   # Rust + 前端完整检查
+pnpm pr:check-body # CI 中校验 PR 模板填写完整
 ```
 
 跳过题会以 `null` 槽位提交，因此每条记录都保留固定 16 题结构；计分仍只统计有效的 `A`/`B`/`C`/`D` 答案。

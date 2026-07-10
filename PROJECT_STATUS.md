@@ -5,7 +5,7 @@
 **阶段**：前端完成，已上线 GitHub Pages。后端完成开发并补充结果校验，等有服务器后部署。
 **仓库**：https://github.com/qiaopengjun5162/xiandong-tennis（PUBLIC）
 **线上地址**：https://qiaopengjun5162.github.io/xiandong-tennis/
-**主线**：`main` 已合并 PR #10，当前提交以 `git log` 为准。
+**主线**：`main` 持续通过 CI，当前提交以 `git log` 为准。
 
 ## 前端
 
@@ -32,7 +32,9 @@
 - CODE_OF_CONDUCT.md — Contributor Covenant 2.1
 - PR #9 — 答案完整性、后端结果校验、离线字体构建修复，已合并并部署
 - PR #10 — 项目状态文档刷新，已合并
+- PR #11 — 本地完整 gate 扩展到 Rust + 前端，已合并
 - `just check-all` — 本地完整 gate，覆盖 Rust fmt/clippy/test 与前端 typecheck/lint/WASM/build
+- PR 模板与 `pr-body` CI gate — 要求每个 PR 写清摘要、影响边界和真实验证命令
 
 ## 验证
 
@@ -46,6 +48,7 @@
 - `node apps/web/e2e/flow.spec.mjs`：ok（2026-07-03，需允许本地监听 `127.0.0.1` 并启动 Chrome）
 - `taplo fmt --option reorder_keys=true --check`：当前沙箱会触发 macOS `system-configuration` panic，需在非受限环境或 CI 再确认
 - `just check-all`：ok（2026-07-10，覆盖 Rust fmt/clippy/nextest 与前端 typecheck/lint/WASM/Webpack build）
+- `pnpm pr:check-body`：本地 fixture 验证 ok（2026-07-10）；CI 会在每个 PR 上执行
 
 ## 常用命令
 
