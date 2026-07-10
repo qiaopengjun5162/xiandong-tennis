@@ -16,6 +16,7 @@
 - Build WASM: `wasm-pack build crates/tennis-core --target web --out-dir ../../apps/web/public/pkg`
 - Check frontend: `cd apps/web && pnpm typecheck && pnpm lint`
 - Build frontend locally: `cd apps/web && pnpm exec next build --webpack`
+- Check PR body locally: `GITHUB_EVENT_NAME=pull_request GITHUB_EVENT_PATH=/path/to/event.json pnpm pr:check-body`
 - Run backend: `DATABASE_URL=postgres://xiandong:xiandong@localhost:5432/xiandong cargo run -p xiandong-server`
 - Run frontend: `cd apps/web && pnpm dev`
 - Full gate: `just check-all`
@@ -42,6 +43,7 @@
 - Pushing a `v*` tag triggers `.github/workflows/build.yml` release jobs.
 - `just check-all` intentionally includes Rust checks plus frontend typecheck, lint, WASM build, and local Webpack production build; CI still runs the default `pnpm build`.
 - Local sandbox verification should prefer `next build --webpack` because default Next/Turbopack builds can fail when the sandbox denies local port/process operations.
+- PRs must fill `.github/PULL_REQUEST_TEMPLATE.md`; CI runs `tools/ci/check-pr-body.mjs` to reject empty template sections and missing validation evidence.
 
 ## Change Recording
 

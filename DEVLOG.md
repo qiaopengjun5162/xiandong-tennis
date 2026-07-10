@@ -1,5 +1,36 @@
 # 开发日志 - 弦动 · 网球兵器谱 MVP
 
+## 2026-07-10 会话记录（PR 质量门禁）
+
+### 已完成
+
+- 参考 `/Users/qiaopengjun/Code/qintopia/qintopia-agent-os` 的 PR 模板和 PR body 检查方式，吸收轻量 PR 质量门禁。
+- 新增 `.github/PULL_REQUEST_TEMPLATE.md`，要求 PR 填写变更摘要、计划、影响区域、验证命令、生产边界、架构/工具边界和变更记录。
+- 新增 `tools/ci/check-pr-body.mjs` 和 `pnpm pr:check-body`，CI 会拒绝空模板、未勾选影响项或缺少验证命令的 PR。
+- 更新 build workflow、README、README.zh.md、CONTRIBUTING.md、CLAUDE.md、AGENTS.md、PROJECT_STATUS.md。
+
+### 验证
+
+- `GITHUB_EVENT_NAME=pull_request GITHUB_EVENT_PATH=/private/tmp/xiandong-pr-body-check/empty-event.json node tools/ci/check-pr-body.mjs`：按预期失败，拒绝空 PR body
+- `GITHUB_EVENT_NAME=pull_request GITHUB_EVENT_PATH=/private/tmp/xiandong-pr-body-check/valid-event.json node tools/ci/check-pr-body.mjs`：ok
+- `GITHUB_EVENT_NAME=pull_request GITHUB_EVENT_PATH=/private/tmp/xiandong-pr-body-check/valid-event.json pnpm pr:check-body`：ok
+- `node tools/ci/check-pr-body.mjs`：ok，非 pull_request 事件跳过
+- `just check-all`：ok
+
+### 取舍
+
+- 只吸收 qintopia-agent-os 的“PR 证据门禁”实践，不引入它的大型 agents/skills/runtime/deploy 结构，避免把当前 MVP 复杂化。
+
+### 遇到的问题与解决方法
+
+#### 1. checkbox 正则误转义
+
+**现象：**
+有效 fixture 中的 `- [x]` 一开始被误判为未勾选。
+
+**解决：**
+修正 `tools/ci/check-pr-body.mjs` 中 checkbox 正则，重跑空/有效 fixture 后结果符合预期。
+
 ## 2026-07-10 会话记录
 
 ### 已完成
