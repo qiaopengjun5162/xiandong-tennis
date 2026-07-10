@@ -1,5 +1,23 @@
 # 开发日志 - 弦动 · 网球兵器谱 MVP
 
+## 2026-07-10 会话记录（Manual Gates）
+
+### 已完成
+
+- 参考 `mcncarl/yichen-skills/wechat-mp-batch-exporter` 的 manual gates、隐私边界和输出产物纪律，吸收适合本项目的人工确认流程。
+- 新增 `docs/operations/manual-gates.md`，明确凭据、非本地数据库、生产部署、系统代理/证书、GUI 账号状态和私有产物的确认边界。
+- 更新 PR 模板的 Production Boundary，补充 `Manual/credential-gated operation` 选项。
+- 更新 README、README.zh.md、CONTRIBUTING.md、CLAUDE.md、AGENTS.md、PROJECT_STATUS.md。
+
+### 验证
+
+- `GITHUB_EVENT_NAME=pull_request GITHUB_EVENT_PATH=/private/tmp/xiandong-pr-body-check/valid-manual-gates-event.json node tools/ci/check-pr-body.mjs`：ok
+- `just check-all`：ok
+
+### 取舍
+
+- 只吸收 manual gates 和输出产物纪律，不引入微信公众号批量导出脚本、账号抓取、代理证书或 WeChat 桌面相关流程。
+
 ## 2026-07-10 会话记录（视觉 QA）
 
 ### 已完成

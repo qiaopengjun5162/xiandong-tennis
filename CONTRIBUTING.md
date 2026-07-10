@@ -70,6 +70,7 @@ When your changes are ready:
 - **Rust**: Follow the [Rust style guide](https://doc.rust-lang.org/book/ch01-01-installation.html). Run `cargo fmt` and `cargo clippy --all-targets --all-features --tests --benches -- -D warnings`.
 - **TypeScript / Next.js**: Follow the existing style. Run `cd apps/web && pnpm lint` and `pnpm typecheck`.
 - **Visual QA**: For UI changes, follow `docs/frontend-visual-qa.md` and fill the PR `Visual Evidence` section with screenshots, recordings, or an explicit non-UI note.
+- **Manual gates**: For credentials, non-local databases, deployment, proxy/certificate, GUI account state, or private output artifacts, follow `docs/operations/manual-gates.md`.
 - **Testing**: Ensure your changes do not break any existing functionality. Run the tests before submitting a PR:
 
   ```bash

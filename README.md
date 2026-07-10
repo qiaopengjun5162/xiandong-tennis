@@ -92,6 +92,8 @@ Skipped quiz answers are submitted as `null` slots so every stored result keeps 
 
 UI changes should follow [Frontend Visual QA](docs/frontend-visual-qa.md) and include visual evidence in the PR template.
 
+Credential, deployment, non-local database, proxy/certificate, GUI account, and private artifact workflows must follow [Manual Gates](docs/operations/manual-gates.md).
+
 ## Contributing
 
 We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to report issues, submit pull requests, or improve the project.

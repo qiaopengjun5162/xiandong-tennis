@@ -45,6 +45,7 @@
 - Local sandbox verification should prefer `next build --webpack` because default Next/Turbopack builds can fail when the sandbox denies local port/process operations.
 - PRs must fill `.github/PULL_REQUEST_TEMPLATE.md`; CI runs `tools/ci/check-pr-body.mjs` to reject empty template sections and missing validation evidence.
 - UI-affecting PRs must follow `docs/frontend-visual-qa.md` and fill the PR template's `Visual Evidence` section with screenshots, recordings, or a clear "not UI-affecting" note.
+- Workflows touching credentials, non-local databases, production deployment, system proxy/certificates, GUI account state, or generated private artifacts must follow `docs/operations/manual-gates.md`.
 
 ## Change Recording
 

@@ -46,6 +46,7 @@ Notes:
 - [ ] Database schema or writes
 - [ ] GitHub Pages deploy
 - [ ] Release workflow
+- [ ] Manual/credential-gated operation
 - [ ] Secrets or runtime configuration
 
 Notes:

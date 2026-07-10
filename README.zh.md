@@ -85,6 +85,8 @@ pnpm pr:check-body # CI 中校验 PR 模板填写完整
 
 涉及 UI 的改动请按 [Frontend Visual QA](docs/frontend-visual-qa.md) 验收，并在 PR 模板中填写视觉证据。
 
+涉及凭据、部署、非本地数据库、代理/证书、GUI 账号状态或私有产物的流程，请先按 [Manual Gates](docs/operations/manual-gates.md) 做人工确认。
+
 ## 贡献
 
 我们欢迎贡献！请查看 [CONTRIBUTING.md](CONTRIBUTING.md) 了解如何报告问题、提交拉取请求或改进项目。
