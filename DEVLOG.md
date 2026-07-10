@@ -1,5 +1,22 @@
 # 开发日志 - 弦动 · 网球兵器谱 MVP
 
+## 2026-07-10 会话记录（前端 README 去模板化）
+
+### 已完成
+
+- 将 `apps/web/README.md` 从 shadcn/Next.js 模板说明替换为项目真实前端说明。
+- 补充前端职责、WASM 生成目录、本地运行、`NEXT_PUBLIC_API_URL`、本地/CI 构建差异、E2E 前置条件、视觉 QA 和生产静态导出约束。
+- 更新 `PROJECT_STATUS.md`，把前端子项目 README 纳入文档清单。
+
+### 验证
+
+- `just check-all`：受限沙箱内因 `taplo` 的 macOS `system-configuration` panic 失败。
+- `just check-all`：ok（非受限环境重跑；Rust fmt/clippy/nextest、前端 typecheck/lint、WASM 构建和 Webpack 生产构建均通过）
+
+### 取舍
+
+- 本次只修正文档漂移，不改前端行为、不调整构建脚本，也不引入新的 Markdown 检查工具。
+
 ## 2026-07-10 会话记录（Manual Gates）
 
 ### 已完成

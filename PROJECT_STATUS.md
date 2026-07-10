@@ -30,6 +30,7 @@
 
 - CONTRIBUTING.md — 贡献指南（含项目结构和开发命令）
 - CODE_OF_CONDUCT.md — Contributor Covenant 2.1
+- apps/web/README.md — 前端 H5 的 WASM 生成、本地运行、构建验证和视觉 QA 说明
 - PR #9 — 答案完整性、后端结果校验、离线字体构建修复，已合并并部署
 - PR #10 — 项目状态文档刷新，已合并
 - PR #11 — 本地完整 gate 扩展到 Rust + 前端，已合并
