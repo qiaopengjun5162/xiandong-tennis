@@ -14,6 +14,8 @@
 - Check: `cargo clippy --all-targets --all-features --tests --benches -- -D warnings`
 - Test Rust: `cargo nextest run --workspace --all-features`
 - Build WASM: `wasm-pack build crates/tennis-core --target web --out-dir ../../apps/web/public/pkg`
+- Check frontend: `cd apps/web && pnpm typecheck && pnpm lint`
+- Build frontend locally: `cd apps/web && pnpm exec next build --webpack`
 - Run backend: `DATABASE_URL=postgres://xiandong:xiandong@localhost:5432/xiandong cargo run -p xiandong-server`
 - Run frontend: `cd apps/web && pnpm dev`
 - Full gate: `just check-all`
@@ -38,6 +40,8 @@
 - Scoring rules are defined by the product team and documented in `CLAUDE.md`.
 - PR CI jobs must not reference tag-only container actions.
 - Pushing a `v*` tag triggers `.github/workflows/build.yml` release jobs.
+- `just check-all` intentionally includes Rust checks plus frontend typecheck, lint, WASM build, and local Webpack production build; CI still runs the default `pnpm build`.
+- Local sandbox verification should prefer `next build --webpack` because default Next/Turbopack builds can fail when the sandbox denies local port/process operations.
 
 ## Change Recording
 

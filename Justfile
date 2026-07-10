@@ -22,6 +22,18 @@ test:
 test-core:
 	cargo nextest run -p xiandong-tennis-core
 
+# Run frontend type checking.
+web-typecheck:
+	cd apps/web && pnpm typecheck
+
+# Run frontend lint checks.
+web-lint:
+	cd apps/web && pnpm lint
+
+# Build the frontend using Webpack for deterministic local verification.
+web-build: wasm
+	cd apps/web && pnpm exec next build --webpack
+
 # Format Rust and TOML files.
 fmt:
 	cargo fmt --all
@@ -31,5 +43,11 @@ fmt:
 clippy:
 	cargo clippy --all-targets --all-features --tests --benches -- -D warnings
 
+# Full Rust checks.
+check-rust: fmt clippy test
+
+# Full frontend checks.
+check-web: web-typecheck web-lint web-build
+
 # Full pre-commit checks.
-check-all: fmt clippy test
+check-all: check-rust check-web

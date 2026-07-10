@@ -1,5 +1,43 @@
 # 开发日志 - 弦动 · 网球兵器谱 MVP
 
+## 2026-07-10 会话记录
+
+### 已完成
+
+- 将 `just check-all` 从 Rust-only 检查扩展为完整本地 gate：Rust fmt/clippy/nextest，加前端 typecheck/lint、WASM 构建和 Webpack 生产构建。
+- 新增 `just check-rust` 与 `just check-web`，方便分层验证。
+- 更新 README、README.zh.md、CONTRIBUTING.md、CLAUDE.md、AGENTS.md、PROJECT_STATUS.md，修正本地完整检查范围和当前部署状态。
+
+### 验证
+
+- `cargo fmt --all -- --check`：ok
+- `cargo clippy --all-targets --all-features --tests --benches -- -D warnings`：ok（`sqlx-postgres` 有 future-incompat 依赖提示）
+- `cargo nextest run --workspace --all-features`：20 passed
+- `cd apps/web && pnpm typecheck`：ok
+- `cd apps/web && pnpm lint`：ok
+- `wasm-pack build crates/tennis-core --target web --out-dir ../../apps/web/public/pkg`：ok
+- `cd apps/web && pnpm exec next build --webpack`：ok
+- `cd apps/web && pnpm build`：ok
+- `just check-all`：ok
+
+### 遇到的问题与解决方法
+
+#### 1. `just check-all` 名称与实际覆盖范围不一致
+
+**现象：**
+`PROJECT_STATUS.md` 和 `CLAUDE.md` 把 `just check-all` 描述为完整提交前检查，但 `Justfile` 只执行 Rust fmt、Clippy 和 nextest，漏掉前端类型检查、lint 和构建。
+
+**解决：**
+保留 Rust-only 的 `check-rust`，新增 `check-web`，再让 `check-all` 串联两者。前端本地构建使用 `next build --webpack`，避免当前受限沙箱下默认 Turbopack 构建不稳定。
+
+#### 2. pnpm 在无网络沙箱下无法完成签名校验
+
+**现象：**
+直接运行 `pnpm typecheck` / `pnpm lint` 时，项目声明的 `pnpm@9.0.0` 触发包源签名校验；无网络沙箱返回 `fetch failed`。
+
+**解决：**
+带网络权限重跑后 typecheck、lint 和 `just check-all` 全部通过。后续本地受限环境遇到同类报错时，优先确认 pnpm 版本切换/签名校验是否被网络阻断。
+
 ## 2026-07-03 会话记录
 
 ### 已完成
@@ -186,7 +224,7 @@ VS Code / Prettier 在保存时自动将单引号改为双引号、调整 import
 - [x] 创建 GitHub 仓库并提交 PR #1
 - [ ] 在浏览器中完成一次完整答题流程验证
 - [ ] 验证分享海报下载
-- [ ] 配置 CI/CD（GitHub Actions）
+- [x] 配置 CI/CD（GitHub Actions）
 - [ ] 部署到服务器或静态托管
 
 ### 参考链接

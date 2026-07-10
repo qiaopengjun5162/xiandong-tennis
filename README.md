@@ -82,7 +82,9 @@ xiandong-tennis/
 just test        # Run Rust tests
 just fmt         # Format Rust + TOML
 just clippy      # Run Clippy lints
-just check-all   # fmt + clippy + test
+just check-rust  # fmt + clippy + Rust tests
+just check-web   # frontend typecheck + lint + WASM build + production build
+just check-all   # full Rust + frontend gate
 ```
 
 Skipped quiz answers are submitted as `null` slots so every stored result keeps the fixed 16-question shape while scoring still uses only valid `A`/`B`/`C`/`D` answers.

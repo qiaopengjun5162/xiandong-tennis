@@ -5,7 +5,7 @@
 **阶段**：前端完成，已上线 GitHub Pages。后端完成开发并补充结果校验，等有服务器后部署。
 **仓库**：https://github.com/qiaopengjun5162/xiandong-tennis（PUBLIC）
 **线上地址**：https://qiaopengjun5162.github.io/xiandong-tennis/
-**分支**：`main`（`6e67490c`，工作区干净）
+**主线**：`main` 已合并 PR #10，当前提交以 `git log` 为准。
 
 ## 前端
 
@@ -31,6 +31,8 @@
 - CONTRIBUTING.md — 贡献指南（含项目结构和开发命令）
 - CODE_OF_CONDUCT.md — Contributor Covenant 2.1
 - PR #9 — 答案完整性、后端结果校验、离线字体构建修复，已合并并部署
+- PR #10 — 项目状态文档刷新，已合并
+- `just check-all` — 本地完整 gate，覆盖 Rust fmt/clippy/test 与前端 typecheck/lint/WASM/build
 
 ## 验证
 
@@ -40,14 +42,18 @@
 - `apps/web/node_modules/.bin/tsc --noEmit --project apps/web/tsconfig.json`：ok（2026-07-03）
 - `cd apps/web && ./node_modules/.bin/eslint . --ignore-pattern dist --ignore-pattern public/pkg`：ok（2026-07-03）
 - `cd apps/web && ./node_modules/.bin/next build --webpack`：ok（2026-07-03）
+- `cd apps/web && pnpm build`：ok（2026-07-10，CI 同款默认 Turbopack 构建）
 - `node apps/web/e2e/flow.spec.mjs`：ok（2026-07-03，需允许本地监听 `127.0.0.1` 并启动 Chrome）
 - `taplo fmt --option reorder_keys=true --check`：当前沙箱会触发 macOS `system-configuration` panic，需在非受限环境或 CI 再确认
+- `just check-all`：ok（2026-07-10，覆盖 Rust fmt/clippy/nextest 与前端 typecheck/lint/WASM/Webpack build）
 
 ## 常用命令
 
 ```bash
 just wasm                          # 构建 WASM
-just check-all                     # fmt + clippy + test
+just check-rust                    # Rust fmt + clippy + test
+just check-web                     # 前端 typecheck + lint + WASM + build
+just check-all                     # Rust + 前端完整 gate
 cd apps/web && pnpm build          # 构建前端
 cd apps/web && node e2e/flow.spec.mjs  # E2E
 cd apps/web && pnpm dev            # 本地开发
