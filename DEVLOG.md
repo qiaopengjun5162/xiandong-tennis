@@ -1,5 +1,25 @@
 # 开发日志 - 弦动 · 网球兵器谱 MVP
 
+## 2026-07-10 会话记录（视觉 QA）
+
+### 已完成
+
+- 参考 `JCodesMore/ai-website-cloner-template` 的站点检查流程，吸收轻量视觉 QA 实践。
+- 新增 `docs/frontend-visual-qa.md`，记录 UI 改动需要检查的截图、设计方向、交互、响应式和分享海报项目。
+- 在 PR 模板中新增 `Visual Evidence`，并更新 `tools/ci/check-pr-body.mjs`，要求每个 PR 明确说明是否影响 UI，以及是否提供视觉证据。
+- 更新 README、README.zh.md、CONTRIBUTING.md、CLAUDE.md、AGENTS.md、PROJECT_STATUS.md。
+
+### 验证
+
+- `GITHUB_EVENT_NAME=pull_request GITHUB_EVENT_PATH=/private/tmp/xiandong-pr-body-check/missing-visual-event.json node tools/ci/check-pr-body.mjs`：按预期失败，拒绝缺少 `Visual Evidence` 的 PR body
+- `GITHUB_EVENT_NAME=pull_request GITHUB_EVENT_PATH=/private/tmp/xiandong-pr-body-check/valid-visual-event.json node tools/ci/check-pr-body.mjs`：ok
+- `GITHUB_EVENT_NAME=pull_request GITHUB_EVENT_PATH=/private/tmp/xiandong-pr-body-check/valid-visual-event.json pnpm pr:check-body`：ok
+- `just check-all`：ok
+
+### 取舍
+
+- 只吸收视觉验收清单和 PR 证据要求，不引入一键克隆、并行 agent worktree、跨平台 skill 同步等重型机制。
+
 ## 2026-07-10 会话记录（PR 质量门禁）
 
 ### 已完成

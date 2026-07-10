@@ -90,6 +90,8 @@ pnpm pr:check-body # validate filled PR template in CI
 
 Skipped quiz answers are submitted as `null` slots so every stored result keeps the fixed 16-question shape while scoring still uses only valid `A`/`B`/`C`/`D` answers.
 
+UI changes should follow [Frontend Visual QA](docs/frontend-visual-qa.md) and include visual evidence in the PR template.
+
 ## Contributing
 
 We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to report issues, submit pull requests, or improve the project.

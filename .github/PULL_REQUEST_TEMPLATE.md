@@ -29,6 +29,15 @@ Commands run:
 
 ```
 
+## Visual Evidence
+
+- [ ] Not UI-affecting
+- [ ] Screenshots or recordings attached
+- [ ] Responsive states checked: mobile, tablet, desktop
+- [ ] Share poster checked
+
+Notes:
+
 ## Production Boundary
 
 - [ ] Does not touch production boundary
