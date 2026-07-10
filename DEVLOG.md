@@ -1,5 +1,24 @@
 # 开发日志 - 弦动 · 网球兵器谱 MVP
 
+## 2026-07-10 会话记录（场地库基础）
+
+### 已完成
+
+- 参考用户提供的 `西安球场统计（2026.6.4更新）` 图片，将约球产品的下一块基础能力落到场地库。
+- 新增 `venues` 数据库迁移，保存球场名称、片区、地址、室外/室内/风雨棚数量、总数、公开预订备注和来源日期。
+- 新增只读接口 `GET /api/venues` 和 `GET /api/venues/areas`，用于后续前端场地浏览、筛选和约球创建。
+- 新增 `docs/product/venue-directory.md`，记录图片字段映射、导入规则和联系方式隐私边界。
+- 更新 README、README.zh.md、PROJECT_STATUS.md、CLAUDE.md、AGENTS.md 和 `packages/core` 场地响应类型。
+
+### 验证
+
+- `just check-all`：ok（22 tests passed；Rust fmt/clippy/nextest、前端 typecheck/lint、WASM 构建和 Webpack 生产构建均通过）
+
+### 取舍
+
+- 图片里包含手机号、微信号等联系方式，本次不直接 OCR 入库、不提交 seed 数据；后续需要先由 owner 审核清洗版 CSV/SQL，再导入公开可复核的场地元数据。
+- 只做场地只读基础，不提前实现账号、约球发布、报名确认、聊天通知或支付。
+
 ## 2026-07-10 会话记录（产品目标校正）
 
 ### 已完成

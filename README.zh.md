@@ -15,7 +15,7 @@
 
 - **Rust WASM 核心**（`crates/tennis-core`）：题库、计分规则、人格数据。
 - **Next.js H5 前端**（`apps/web`）：答题流程、结果展示、海报生成。
-- **Axum 后端**（`crates/server`）：将测试结果持久化到 PostgreSQL。
+- **Axum 后端**（`crates/server`）：将测试结果和场地元数据持久化到 PostgreSQL。
 
 ## 功能
 
@@ -26,6 +26,7 @@
 - Rust WASM 核心跨端复用。
 - 使用 `html2canvas` 生成分享海报。
 - 后端通过 Axum + sqlx + PostgreSQL 记录结果，并在入库前按答案重新计算校验结果类型。
+- 场地库基础能力：提供网球场地、片区和场地数量的只读 API。
 
 长期产品方向：
 
@@ -97,6 +98,8 @@ pnpm pr:check-body # CI 中校验 PR 模板填写完整
 涉及 UI 的改动请按 [Frontend Visual QA](docs/frontend-visual-qa.md) 验收，并在 PR 模板中填写视觉证据。
 
 涉及凭据、部署、非本地数据库、代理/证书、GUI 账号状态或私有产物的流程，请先按 [Manual Gates](docs/operations/manual-gates.md) 做人工确认。
+
+场地数据导入请遵循 [Venue Directory](docs/product/venue-directory.md)；不要把截图中的手机号或微信号作为 seed 数据提交进仓库。
 
 ## 贡献
 

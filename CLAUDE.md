@@ -41,6 +41,17 @@ flowchart TD
     Result -- 生成兵器卡 --> Poster[分享海报 PNG]
 ```
 
+## 约球产品路线
+
+当前人格测试负责冷启动和玩家风格标签，场地库负责承接到真实打球场景。后续约球能力应围绕用户档案、场地选择、约球发布、报名确认、取消和打球反馈逐步展开。
+
+当前已新增场地只读 API：
+
+- `GET /api/venues`：场地列表，支持 `area`、`q`、`limit`
+- `GET /api/venues/areas`：已导入场地片区及数量
+
+场地数据来源可参考 `docs/product/venue-directory.md`；截图里的手机号、微信号等联系方式不能直接作为 seed 数据提交。
+
 ## 计分规则
 
 1. 前端保留固定 16 题答案槽位；跳过题为 `null`，计分只统计有效 A/B/C/D。
@@ -89,6 +100,7 @@ pnpm pr:check-body # CI 中校验 PR 模板填写完整
 - PR 必须写清变更摘要、影响边界和验证命令；CI 会拒绝空模板 PR。
 - UI 变更按 `docs/frontend-visual-qa.md` 做截图/录屏验收，并填写 PR 的 `Visual Evidence`。
 - 凭据、非本地数据库、生产部署、系统代理/证书、GUI 账号状态和私有产物按 `docs/operations/manual-gates.md` 走人工确认。
+- 场地联系方式属于运营/隐私敏感数据，必须先清洗和确认来源边界；仓库内只提交公开可复核的场地元数据。
 - 后续微信小程序可复用同一套 WASM 核心。
 
 ## 环境变量

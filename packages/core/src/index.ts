@@ -28,3 +28,39 @@ export type WeaponType =
   | 'CHAIN_MACE'
   | 'LANCE'
   | 'KATANA';
+
+export interface CourtCounts {
+  outdoor: number;
+  indoor: number;
+  covered: number;
+  total: number;
+}
+
+export interface VenueSource {
+  label: string;
+  updatedOn: string | null;
+}
+
+export interface Venue {
+  id: number;
+  name: string;
+  area: string;
+  address: string;
+  courts: CourtCounts;
+  bookingNote: string | null;
+  source: VenueSource;
+}
+
+export interface VenueListResponse {
+  items: Venue[];
+  limit: number;
+}
+
+export interface VenueArea {
+  area: string;
+  venueCount: number;
+}
+
+export interface VenueAreaListResponse {
+  items: VenueArea[];
+}

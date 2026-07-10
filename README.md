@@ -22,7 +22,7 @@ The project is intentionally split so that the core logic can be reused across W
 
 - **Rust WASM core** (`crates/tennis-core`): questions, scoring, and personality data.
 - **Next.js H5 frontend** (`apps/web`): quiz flow, result screen, and poster generation.
-- **Axum backend** (`crates/server`): persists quiz results to PostgreSQL.
+- **Axum backend** (`crates/server`): persists quiz results and venue metadata to PostgreSQL.
 
 ## Features
 
@@ -33,6 +33,7 @@ Current MVP:
 - Rust WASM core shared across platforms.
 - Share poster generation via `html2canvas`.
 - Backend result recording with Axum + sqlx + PostgreSQL; the API recomputes the result from submitted answers before persisting.
+- Venue directory foundation with read-only APIs for tennis courts, areas, and court counts.
 
 Long-term product direction:
 
@@ -104,6 +105,8 @@ Skipped quiz answers are submitted as `null` slots so every stored result keeps 
 UI changes should follow [Frontend Visual QA](docs/frontend-visual-qa.md) and include visual evidence in the PR template.
 
 Credential, deployment, non-local database, proxy/certificate, GUI account, and private artifact workflows must follow [Manual Gates](docs/operations/manual-gates.md).
+
+Venue data imports should follow [Venue Directory](docs/product/venue-directory.md); raw phone numbers or WeChat IDs from screenshots should not be committed as seed data.
 
 ## Contributing
 
